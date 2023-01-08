@@ -23,7 +23,7 @@ public class AdministratorController {
         //根据session判断是否是管理员
         User user = (User) session.getAttribute("currentUser");
         if(user==null||user.getType()!=0){//不是管理员
-            return new Result(Code.ERR,null,"您不是管理员");
+            return new Result(Code.ERR,null,"错误访问");
         }
         //是管理员
         //找到管理员数据

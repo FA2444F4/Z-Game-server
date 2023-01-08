@@ -1,5 +1,6 @@
 package com.zy.service;
 
+import com.zy.domain.Developer;
 import com.zy.domain.Player;
 import com.zy.domain.User;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,5 +28,22 @@ public interface UserService {
      * @param player
      * @return
      */
-    public  Boolean addUserAndPlayer(User user, Player player);
+    public Boolean addUserAndPlayer(User user, Player player);
+
+    /**
+     * 添加用户和开发商
+     * @param user
+     * @param developer
+     * @return
+     */
+    public Boolean addUserAndDeveloper(User user, Developer developer);
+
+
+
+    /**
+     * 根据用户名找用户的id
+     * @param username
+     * @return
+     */
+    public Integer selectUserIdByUsername(String username);
 }

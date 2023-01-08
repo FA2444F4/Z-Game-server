@@ -16,6 +16,7 @@ public interface UserDao {
     @Insert("insert into user values(null,#{username},#{password},#{type},#{create_time})")
     public Integer AddUser(User user);
 
+
     @Select("SELECT id FROM USER WHERE username = #{username}")
     public Integer getIdByUsername(String username);
 }

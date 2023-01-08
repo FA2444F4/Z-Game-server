@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class Developer {
     private Integer id;
-    private String nick_name;
+    private String name;
     private Double deposit;
+    private String phone;
+    private String description;
 }

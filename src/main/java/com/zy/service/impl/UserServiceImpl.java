@@ -1,7 +1,9 @@
 package com.zy.service.impl;
 
+import com.zy.dao.DeveloperDao;
 import com.zy.dao.PlayerDao;
 import com.zy.dao.UserDao;
+import com.zy.domain.Developer;
 import com.zy.domain.Player;
 import com.zy.domain.User;
 import com.zy.service.UserService;
@@ -15,6 +17,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Autowired
     private PlayerDao playerDao;
+    @Autowired
+    private DeveloperDao developerDao;
 
 
     @Override
@@ -43,5 +47,21 @@ public class UserServiceImpl implements UserService {
 
         //懒得判断了
         return null;
+    }
+
+    @Override
+    public Boolean addUserAndDeveloper(User user, Developer developer) {
+        userDao.AddUser(user);
+        Integer id = userDao.getIdByUsername(user.getUsername());
+        developer.setId(id);
+        developerDao.addDeveloper(developer);
+
+        //懒得判断了
+        return null;
+    }
+
+    @Override
+    public Integer selectUserIdByUsername(String username) {
+        return userDao.getIdByUsername(username);
     }
 }
