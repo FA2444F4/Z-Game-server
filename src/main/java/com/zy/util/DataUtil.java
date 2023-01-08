@@ -9,6 +9,6 @@ public class DataUtil {
     }
 
     public static Long timestamp(){
-        return System.currentTimeMillis();
+        return System.currentTimeMillis()/1000;
     }
 }

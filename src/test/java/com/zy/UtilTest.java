@@ -18,5 +18,8 @@ public class UtilTest {
     public void time(){
         Long time= System.currentTimeMillis();
         System.out.println(time);
+
+        Long time2=DataUtil.timestamp();
+        System.out.println(time2);
     }
 }

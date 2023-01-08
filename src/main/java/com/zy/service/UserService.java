@@ -1,5 +1,6 @@
 package com.zy.service;
 
+import com.zy.domain.Player;
 import com.zy.domain.User;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,4 +20,12 @@ public interface UserService {
      * @return
      */
     public Boolean verifyUsernameIsUniQue(String username);
+
+    /**
+     * 添加user和player
+     * @param user
+     * @param player
+     * @return
+     */
+    public  Boolean addUserAndPlayer(User user, Player player);
 }
