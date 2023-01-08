@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/zgame?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: 123456
+  # main:
+    # banner-mode: off # 关闭spring boot banner
+
+# 端口号
+server:
+  port: 8080
+
+# 减少信息显示量warn正常info
+logging:
+  level:
+    root: warn
