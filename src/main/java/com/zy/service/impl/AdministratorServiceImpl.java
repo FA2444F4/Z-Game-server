@@ -6,6 +6,7 @@ import com.zy.domain.Administrator;
 import com.zy.domain.Param;
 import com.zy.domain.User;
 import com.zy.service.AdministratorService;
+import com.zy.util.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +30,14 @@ public class AdministratorServiceImpl implements AdministratorService {
         param.setUser(user);
         param.setAdministrator(administrator);
         return param;
+    }
+
+    @Override
+    public Boolean updateAdministratorInfo(Administrator administrator, User user) {
+        user.setPassword(DataUtil.MD5(user.getPassword()));
+        administratorDao.updateAdministratorInfo(administrator);
+        userDao.updateUserInfo(user);
+
+        return true;
     }
 }

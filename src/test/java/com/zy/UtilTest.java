@@ -11,6 +11,7 @@ public class UtilTest {
     public void md5(){
         System.out.println(DataUtil.MD5("123456"));
         //e10adc3949ba59abbe56e057f20f883e
+        System.out.println(DataUtil.MD5("111111"));//96e79218965eb72c92a549dd5a330112
     }
 
     //时间戳

@@ -51,7 +51,6 @@ public class TagController {
     //修改标签
     @PutMapping("/updateTag")
     public Result updateTag(@RequestBody Tag tag){
-        System.out.println(tag);
         Boolean flag = tagService.updateTag(tag);
         return new Result(flag?Code.OK:Code.ERR,null,null);
 
