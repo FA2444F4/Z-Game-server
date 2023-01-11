@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface PlayerDao {
     @Insert("insert into player values(#{id},#{status},#{deposit},#{nick_name},#{name},#{sex},#{phone})")
-    public Integer AddPlayer(Player player);
+    public Integer addPlayer(Player player);
 
     @Select("SELECT * FROM player WHERE id=#{id}")
     public Player getPlayerById(Integer id);

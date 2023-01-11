@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         userDao.AddUser(user);
         Integer id = userDao.getIdByUsername(user.getUsername());
         player.setId(id);
-        playerDao.AddPlayer(player);
+        playerDao.addPlayer(player);
 
         //懒得判断了
         return null;

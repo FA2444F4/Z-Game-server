@@ -1,6 +1,7 @@
 package com.zy.controller;
 
 import com.zy.domain.Administrator;
+import com.zy.domain.Param;
 import com.zy.domain.User;
 import com.zy.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,14 @@ public class AdministratorController {
         //找到管理员数据
         Administrator administrator = administratorService.getAdministratorById(user.getId());
         /**
-         * todo
+         *
          * 准备管理员home需要的数据
          */
-        return new Result(Code.OK,null,"管理员["+administrator.getNick_name()+"],您好!");
+        Integer id=user.getId();
+        Param param = administratorService.getAdministratorInfo(id);
+        return new Result(Code.OK,param,"管理员["+administrator.getNick_name()+"],您好!");
     }
+
+
 
 }

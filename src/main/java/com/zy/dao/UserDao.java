@@ -1,5 +1,6 @@
 package com.zy.dao;
 
+import com.zy.domain.Administrator;
 import com.zy.domain.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -19,4 +20,7 @@ public interface UserDao {
 
     @Select("SELECT id FROM USER WHERE username = #{username}")
     public Integer getIdByUsername(String username);
+
+    @Select("SELECT * FROM user WHERE id=#{id}")
+    public User getUserById(Integer id);
 }
