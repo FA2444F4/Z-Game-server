@@ -6,6 +6,7 @@ import com.zy.domain.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface PlayerDao {
@@ -14,4 +15,8 @@ public interface PlayerDao {
 
     @Select("SELECT * FROM player WHERE id=#{id}")
     public Player getPlayerById(Integer id);
+
+    @Update("update player set nick_name=#{nick_name},name=#{name},sex=#{sex},phone=#{phone} where id=#{id}")
+    public Integer updatePlayerInfo(Player player);
+
 }
