@@ -10,7 +10,7 @@ spring:
 
 # 端口号
 server:
-  port: 8080
+  port: 8083
 
 # 减少信息显示量warn正常info
 logging:

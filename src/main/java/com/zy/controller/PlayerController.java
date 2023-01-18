@@ -31,7 +31,6 @@ public class PlayerController {
         Player player = playerService.getPlayerById(user.getId());
         Integer id =user.getId();
         Param param = playerService.getPlayerInfo(id);
-        System.out.println("给前端的首页加载数据"+param);
         return new Result(Code.OK,param,"玩家["+player.getNick_name()+"],您好!");
     }
 
@@ -44,7 +43,6 @@ public class PlayerController {
 
     @PutMapping("/updatePlayerInfo")
     public Result updatePlayerInfo(@RequestBody Param param){
-        System.out.println("更新前"+param);
 
 
 

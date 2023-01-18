@@ -5,6 +5,7 @@ import com.zy.domain.Player;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface DeveloperDao {
@@ -14,4 +15,7 @@ public interface DeveloperDao {
 
     @Select("SELECT * FROM developer WHERE id=#{id}")
     public com.zy.domain.Developer getDeveloperById(Integer id);
+
+    @Update("update developer set deposit=#{deposit},name=#{name},phone=#{phone},description=#{description} where id=#{id}")
+    public Integer updateDeveloperInfo(Developer developer);
 }
