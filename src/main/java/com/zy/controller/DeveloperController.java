@@ -19,6 +19,7 @@ public class DeveloperController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("homeLoad")
     public Result developerHomeLoad(HttpSession session){
         //根据session判断是否是开发商
@@ -52,4 +53,6 @@ public class DeveloperController {
         developerService.updateDeveloperInfo(param.getUser(),param.getDeveloper());
         return new Result(Code.OK,null,null);
     }
+
+
 }
