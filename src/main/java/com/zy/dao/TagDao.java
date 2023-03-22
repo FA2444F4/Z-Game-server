@@ -24,4 +24,11 @@ public interface TagDao {
 
     @Update("update tag set name=#{name},description=#{description} where id=#{id}")
     public Integer updateTag(Tag tag);
+
+    //SELECT tag.`name` FROM tag,game_tag WHERE game_tag.`game_id`=1 AND game_tag.`tag_id`=tag.`id`
+    @Select("SELECT tag.`name` FROM tag,game_tag WHERE game_tag.`game_id`=#{id} AND game_tag.`tag_id`=tag.`id`")
+    public List<String> selectTagNameByGameId(Integer id);
+
+    @Delete("delete from tag where game_id=#{id}")
+    public Integer deleteTagByGameId(Integer id);
 }

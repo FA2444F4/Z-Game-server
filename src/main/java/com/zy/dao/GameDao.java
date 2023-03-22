@@ -1,10 +1,7 @@
 package com.zy.dao;
 
 import com.zy.domain.Game;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -16,4 +13,13 @@ public interface GameDao {
 
     @Select("select * from game where developer_id = #{id}")
     public List<Game> getGameListByDeveloperId(Integer id);
+
+    @Select("select * from game where id=#{id}")
+    public Game selectGameById(Integer id);
+
+    @Select("select * from game")
+    public List<Game> selectAllGame();
+
+    @Delete("delete from game where id=#{id}")
+    public Integer deleteGameByGameId(Integer id);
 }

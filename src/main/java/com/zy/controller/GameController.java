@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/game")
@@ -67,6 +64,58 @@ public class GameController {
         Integer developer_id=user.getId();
         //获取指定开发商的所有游戏
         List<Game> gameList = gameService.getGameListByDeveloperId(developer_id);
+        return new Result(Code.OK, gameList, null);
+
+    }
+
+    //开发商获取旗下所有游戏
+    @GetMapping("/getAllGame")
+    public Result getAllGame(HttpSession session) {
+
+
+        //获取User
+        User user = (User) session.getAttribute("currentUser");
+        Integer developer_id=user.getId();
+        //获取指定开发商的所有游戏
+        List<Game> gameList = gameService.getGameListByDeveloperId(developer_id);
+        return new Result(Code.OK, gameList, null);
+
+    }
+
+
+
+    @GetMapping("/gameInfoLoad/{id}")
+    public Result gameInfoLoad(@PathVariable Integer id, HttpSession session) {
+        //id为游戏id
+        //获取游戏
+        Game game=gameService.selectGameById(id);
+        //获取游戏标签
+        List<String> tags = tagService.selectTagNameByGameId(id);
+        //
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("game",game);
+        map.put("tags",tags);
+
+        return new Result(Code.OK, map, null);
+
+    }
+
+    @DeleteMapping("/deleteGame/{id}")
+    public Result deleteGame(@PathVariable Integer id, HttpSession session) {
+        //删除标签
+        tagService.deleteTagByGameId(id);
+        //删除游戏
+        gameService.deleteGameByGameId(id);
+
+        return new Result(Code.OK, null, null);
+
+    }
+
+    //获得所有所有的游戏信息的列表
+    @GetMapping("/getAllGame2")
+    public Result getAllGame2(HttpSession session) {
+
+        ArrayList<HashMap<String,Object>> gameList= gameService.selectAllGame();
         return new Result(Code.OK, gameList, null);
 
     }

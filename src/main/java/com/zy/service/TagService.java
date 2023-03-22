@@ -47,4 +47,13 @@ public interface TagService {
      * @return
      */
     public Boolean updateTag(Tag tag);
+
+    /**
+     * 根据游戏id搜索对应标签名的list
+     * @param id
+     * @return
+     */
+    public List<String> selectTagNameByGameId(Integer id);
+
+    public Integer deleteTagByGameId(Integer id);
 }

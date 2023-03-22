@@ -4,7 +4,10 @@ import com.zy.dao.GameDao;
 import com.zy.domain.Game;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 public interface GameService {
@@ -22,4 +25,20 @@ public interface GameService {
      * @return
      */
     public List<Game> getGameListByDeveloperId(Integer id);
+
+    /**
+     * 根据游戏id搜索游戏
+     * @param id
+     * @return
+     */
+    public Game selectGameById(Integer id);
+
+    public Integer deleteGameByGameId(Integer id);
+
+    /**
+     * 搜索游戏信息
+     * 和    游戏评分
+     *  其他待定
+     */
+    public ArrayList<HashMap<String,Object>> selectAllGame();
 }

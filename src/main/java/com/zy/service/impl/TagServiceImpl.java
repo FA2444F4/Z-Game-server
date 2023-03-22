@@ -47,4 +47,16 @@ public class TagServiceImpl implements TagService {
         Integer count=tagDao.updateTag(tag);
         return count>0;
     }
+
+    @Override
+    public List<String> selectTagNameByGameId(Integer id) {
+        return tagDao.selectTagNameByGameId(id);
+    }
+
+    @Override
+    public Integer deleteTagByGameId(Integer id) {
+        return tagDao.deleteTagByGameId(id);
+    }
+
+
 }
