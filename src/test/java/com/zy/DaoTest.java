@@ -3,6 +3,7 @@ package com.zy;
 import com.zy.dao.GameDao;
 import com.zy.dao.GameRatingDao;
 import com.zy.dao.TagDao;
+import com.zy.domain.Game;
 import com.zy.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +41,14 @@ public class DaoTest {
         System.out.println(game_rating.countRatingAvg(1));
         System.out.println(game_rating.countRatingAvg(10));
     }
+
+    @Test
+    void a3(){
+        for (Game element : gameDao.selectGameByInput("糖")) {
+            System.out.println(element);
+        }
+
+    }
+
+
 }

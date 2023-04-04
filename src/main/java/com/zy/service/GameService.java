@@ -41,4 +41,16 @@ public interface GameService {
      *  其他待定
      */
     public ArrayList<HashMap<String,Object>> selectAllGame();
+
+    //根据用户输入词模糊查询游戏
+    public ArrayList<HashMap<String,Object>> selectGameByInput(String input);
+
+
+    public ArrayList<HashMap<String,Object>> getGameListByRatingDescending();
+    public ArrayList<HashMap<String,Object>> getGameListByRatingAscending();
+
+    public ArrayList<HashMap<String,Object>> getGameListByPriceDescending();
+    public ArrayList<HashMap<String,Object>> getGameListByPriceAscending();
+
+    public ArrayList<HashMap<String,Object>> getWaitingRatingGameList();
 }

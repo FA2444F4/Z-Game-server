@@ -2,6 +2,9 @@ package com.zy.service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 @Transactional
 public interface GameRatingService {
     /**
@@ -17,4 +20,12 @@ public interface GameRatingService {
      * @return
      */
     public Integer countRatingNum(Integer game_id);
+
+
+    public Boolean ifPlayerRatingNumberEnough(Integer player_id);
+
+    /**
+     * 没有评分则创建,有则修改
+     */
+    public void createOrUpdatePlayerRating(ArrayList<Map<String,Integer>> ratingList,Integer player_id);
 }

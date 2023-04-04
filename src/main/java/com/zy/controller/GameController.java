@@ -5,6 +5,7 @@ import com.zy.domain.Game;
 import com.zy.domain.Param;
 import com.zy.domain.Tag;
 import com.zy.domain.User;
+import com.zy.service.GameRatingService;
 import com.zy.service.GameService;
 import com.zy.service.TagService;
 import com.zy.util.JsonXMLUtils;
@@ -21,6 +22,8 @@ public class GameController {
     private TagService tagService;
     @Autowired
     private GameService gameService;
+    @Autowired
+    private GameRatingService gameRatingService;
 
     @GetMapping("/addGamePageLoad")
     public Result addGamePageLoad(HttpSession session) {
@@ -119,5 +122,65 @@ public class GameController {
         return new Result(Code.OK, gameList, null);
 
     }
+
+    @GetMapping("/getGameListByRatingDescending")
+    public Result getGameListByRatingDescending(){
+        ArrayList<HashMap<String,Object>> gameList= gameService.getGameListByRatingDescending();
+        return new Result(Code.OK, gameList, null);
+    }
+    @GetMapping("/getGameListByRatingAscending")
+    public Result getGameListByRatingAscending(){
+        ArrayList<HashMap<String,Object>> gameList= gameService.getGameListByRatingAscending();
+        return new Result(Code.OK, gameList, null);
+    }
+    @GetMapping("/getGameListByPriceDescending")
+    public Result getGameListByPriceDescending(){
+        ArrayList<HashMap<String,Object>> gameList= gameService.getGameListByPriceDescending();
+        return new Result(Code.OK, gameList, null);
+    }
+    @GetMapping("/getGameListByPriceAscending")
+    public Result getGameListByPriceAscending(){
+        ArrayList<HashMap<String,Object>> gameList= gameService.getGameListByPriceAscending();
+        return new Result(Code.OK, gameList, null);
+    }
+
+    //根据模糊查询获得游戏
+    @GetMapping("/selectGameByInput/{input}")
+    public Result selectGameByInput(@PathVariable String input,HttpSession session){
+        ArrayList<HashMap<String,Object>> gameList= gameService.selectGameByInput(input);
+        return new Result(Code.OK, gameList, null);
+    }
+
+    //获取单个游戏
+    @GetMapping("/getGameInfo/{id}")
+    public Result getGameInfo(@PathVariable Integer id,HttpSession session){
+
+        HashMap<String, Object> map = new HashMap<>();
+        //添加游戏
+        Game game = gameService.selectGameById(id);
+        map.put("game",game);
+        //添加游戏对应评分
+        Integer num= gameRatingService.countRatingNum(id);
+        if(num==0){
+            map.put("rating",-1);
+        }else {
+            map.put("rating",gameRatingService.countRatingAvg(id));
+        }
+
+
+        return new Result(Code.OK,map,null);
+    }
+
+    //获得待评论游戏列表
+    @GetMapping("/getWaitingRatingGameList")
+    public Result getWaitingRatingGameList(HttpSession session) {
+        ArrayList<HashMap<String,Object>> gameList=gameService.getWaitingRatingGameList();
+        return new Result(Code.OK, gameList, null);
+
+    }
+
+
+
+
 
 }
