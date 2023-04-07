@@ -80,7 +80,6 @@ public class PlayerController {
         }*/
         //让server带着ArrayList<Map<String,Integer>>和player去修改评论
         gameRatingService.createOrUpdatePlayerRating(ratingList,player_id);
-
         return new Result(Code.OK,null,null);
     }
 }

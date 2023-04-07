@@ -5,6 +5,7 @@ import com.zy.dao.Game_tagDao;
 import com.zy.domain.Game;
 import com.zy.service.GameRatingService;
 import com.zy.service.GameService;
+import com.zy.util.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -147,7 +148,15 @@ public class GameServiceImpl implements GameService {
         Collections.sort(gameList, new Comparator<HashMap<String, Object>>() {
             @Override
             public int compare(HashMap<String, Object> o1, HashMap<String, Object> o2) {
-                return (Integer) o2.get("rating")-(Integer) o1.get("rating");
+//                System.out.println("/////////////////");
+//                System.out.println(o1.get("rating").toString());
+//                System.out.println(o2.get("rating").toString());
+//                System.out.println(o1.get("rating").getClass());
+//                System.out.println(o2.get("rating").getClass());
+//                System.out.println("/////////////////");
+                return DataUtil.makeNumberToInteger(o2.get("rating"))-DataUtil.makeNumberToInteger(o1.get("rating"));
+//                return (Integer) o2.get("rating")-(Integer) o1.get("rating");
+//                return ((Double)o2.get("rating")).intValue() -((Double)o1.get("rating")).intValue();
             }
         });
 
@@ -190,7 +199,8 @@ public class GameServiceImpl implements GameService {
         Collections.sort(gameList, new Comparator<HashMap<String, Object>>() {
             @Override
             public int compare(HashMap<String, Object> o1, HashMap<String, Object> o2) {
-                return (Integer) o1.get("rating")-(Integer) o2.get("rating");
+//                return ((Double)o1.get("rating")).intValue() -((Double)o2.get("rating")).intValue();
+                return DataUtil.makeNumberToInteger(o1.get("rating"))-DataUtil.makeNumberToInteger(o2.get("rating"));
             }
         });
 

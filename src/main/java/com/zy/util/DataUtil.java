@@ -13,4 +13,14 @@ public class DataUtil {
     public static Long timestamp(){
         return System.currentTimeMillis()/1000;
     }
+
+    public static Integer makeNumberToInteger(Object object){
+        if(object.getClass().equals(Integer.class)){
+            return (Integer) object;
+        }else if(object.getClass().equals(Double.class)){
+            return ((Double)object).intValue();
+        }else {
+            return null;
+        }
+    }
 }
