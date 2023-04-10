@@ -1,9 +1,9 @@
 package com.zy.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface GameRatingDao {
@@ -26,5 +26,9 @@ public interface GameRatingDao {
     //新增评分
     @Insert("insert into game_rating values(#{game_id},#{player_id},#{rating},#{comment},#{create_time},#{is_exist})")
     public Integer insertRating(Integer game_id,Integer player_id,Integer rating,String comment,Long create_time,Integer is_exist);
+
+    @Select("select game_id,rating from game_rating where player_id=#{player_id}")
+    public List<Map<String,Integer>> getGameIdAndRatingFromOnePlayer(Integer player_id);
+
 
 }

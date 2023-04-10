@@ -6,6 +6,8 @@ import com.zy.domain.Player;
 import com.zy.domain.User;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 public interface PlayerService {
     /**
@@ -29,5 +31,7 @@ public interface PlayerService {
      * @return
      */
     public Param getPlayerInfo(Integer id);
+
+    public List<Integer> selectPlayerIdList();
 
 }

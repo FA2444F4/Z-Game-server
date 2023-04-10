@@ -12,6 +12,8 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PlayerServiceImpl implements PlayerService {
     @Autowired
@@ -41,5 +43,10 @@ public class PlayerServiceImpl implements PlayerService {
         param.setPlayer(player);
 
         return param;
+    }
+
+    @Override
+    public List<Integer> selectPlayerIdList() {
+        return playerDao.selectPlayerIdList();
     }
 }

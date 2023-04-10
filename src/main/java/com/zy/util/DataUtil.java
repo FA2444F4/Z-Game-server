@@ -20,7 +20,8 @@ public class DataUtil {
         }else if(object.getClass().equals(Double.class)){
             return ((Double)object).intValue();
         }else {
-            return null;
+            System.out.println(object.getClass());
+            return (Integer) object;
         }
     }
 }

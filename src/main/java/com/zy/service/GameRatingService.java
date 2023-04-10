@@ -28,4 +28,11 @@ public interface GameRatingService {
      * 没有评分则创建,有则修改
      */
     public void createOrUpdatePlayerRating(ArrayList<Map<String,Integer>> ratingList,Integer player_id);
+
+    /*
+    根据玩家id搜他的游戏评分数据
+     */
+    public ArrayList<Map<String,Integer>> getGameIdAndRatingFromOnePlayer(Integer player_id);
+
+
 }

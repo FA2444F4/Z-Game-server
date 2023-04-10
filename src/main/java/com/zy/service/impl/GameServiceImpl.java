@@ -355,8 +355,49 @@ public class GameServiceImpl implements GameService {
                 listElement.put("rating",rating);
             }
         }
-        //把表给前端
+
         return waitingRatingGameList;
+    }
+
+    @Override
+    public List<Integer> selectGameIdList() {
+        return gameDao.selectGameIdList();
+    }
+
+    //根据游戏count表返回gameId对应的游戏信息
+    @Override
+    public ArrayList<HashMap<String, Object>> getRecommendGameListByGameIdList(List<Integer> gameCountList) {
+        ArrayList<HashMap<String,Object>> resList=new ArrayList<HashMap<String,Object>>();
+
+
+        for (Integer game_id : gameCountList) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            //找对应元素
+            //根据id找游戏
+            Game game = gameDao.selectGameById(game_id);
+            map.put("game",game);
+            resList.add(map);
+        }
+
+        //搜索游戏评分
+        for (HashMap<String, Object> listElement : resList) {
+            Game game= (Game)listElement.get("game");
+            Integer gameId=game.getId();
+            //统计游戏所有评论的评分
+            //如果没有则为-1
+            //先搜索有几条评论
+            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            if (ratingNum==0){//如果没有评论
+                listElement.put("rating",-1);
+            }else {//如果有评论
+                //按评分排序时 5 4 3 2 1 //未评分数据分开列
+                //根据gameId搜索游戏评分
+                Double rating = gameRatingService.countRatingAvg(gameId);
+                listElement.put("rating",rating);
+            }
+        }
+        //把表给前端
+        return resList;
     }
 
 

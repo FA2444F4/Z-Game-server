@@ -53,4 +53,8 @@ public interface GameService {
     public ArrayList<HashMap<String,Object>> getGameListByPriceAscending();
 
     public ArrayList<HashMap<String,Object>> getWaitingRatingGameList();
+
+    public List<Integer> selectGameIdList();
+
+    public ArrayList<HashMap<String,Object>> getRecommendGameListByGameIdList(List<Integer> gameCountList);
 }

@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 @Mapper
 public interface PlayerDao {
     @Insert("insert into player values(#{id},#{status},#{deposit},#{nick_name},#{name},#{sex},#{phone})")
@@ -18,5 +20,9 @@ public interface PlayerDao {
 
     @Update("update player set nick_name=#{nick_name},name=#{name},sex=#{sex},phone=#{phone} where id=#{id}")
     public Integer updatePlayerInfo(Player player);
+
+    //获取游戏的所有id号
+    @Select("select id from player")
+    public List<Integer> selectPlayerIdList();
 
 }
