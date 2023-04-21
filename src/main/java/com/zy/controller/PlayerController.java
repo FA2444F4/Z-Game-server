@@ -1,12 +1,10 @@
 package com.zy.controller;
 
-import com.zy.domain.Param;
-import com.zy.domain.Player;
-import com.zy.domain.User;
-import com.zy.service.GameRatingService;
-import com.zy.service.GameService;
-import com.zy.service.PlayerService;
-import com.zy.service.UserService;
+import com.zy.dao.PlayerGameDao;
+import com.zy.dao.UserWalletDao;
+import com.zy.domain.*;
+import com.zy.service.*;
+import com.zy.util.DataUtil;
 import com.zy.util.Recommend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +25,15 @@ public class PlayerController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private UserWalletService userWalletService;
+
+    @Autowired
+    private PlayerGameDao playerGameDao;
+    @Autowired
+    private TagService tagService;
+
 
     @GetMapping("homeLoad")
     public Result playerHomeLoad(HttpSession session) {
@@ -177,6 +184,149 @@ public class PlayerController {
 
         return new Result(Code.OK, gameList, null);
     }
+
+    @GetMapping("/selectPlayerGameByOne/{game_id}")
+    public Result selectPlayerGameByOne(@PathVariable Integer game_id,HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        Integer id = user.getId();
+        return new Result(Code.OK,playerService.selectPlayerGameByOne(id,game_id) , null);
+
+    }
+
+
+    @GetMapping("/getPlayerRatingList")
+    public Result selectPlayerGameByOne(HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        Integer id = user.getId();
+        ArrayList<HashMap<String,Object>> ratingList = new ArrayList<>();
+        List<GameRating> rawRatingList = gameRatingService.selectRatingListFromOnePlayer(id);
+        for (GameRating element : rawRatingList) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("game_id",element.getGame_id());
+            map.put("rating",element.getRating());
+            map.put("comment",element.getComment());
+            map.put("create_time",element.getCreate_time());
+            map.put("is_exist",element.getIs_exist());
+            //获取游戏名
+            map.put("game_name",gameService.getGameName(element.getGame_id()));
+            ratingList.add(map);
+        }
+
+        return new Result(Code.OK,ratingList , null);
+
+    }
+
+
+    @GetMapping("/buyAndRatingButtonInfo/{game_id}")
+    public Result buyAndRatingButtonInfo(@PathVariable Integer game_id,HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        Integer id = user.getId();
+
+        return new Result(Code.OK,playerService.buyAndRatingButtonInfo(id,game_id) , null);
+
+    }
+
+    //购买游戏
+    @GetMapping("/playerBuyGame/{game_id}")
+    public Result playerBuyGame(@PathVariable Integer game_id,HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        Integer player_id = user.getId();
+        UserWallet wallet = userWalletService.getUserWallet(player_id);
+        Game game = gameService.selectGameById(game_id);
+        //判断钱够不够
+        if(wallet.getBalance()>=game.getPrice()){//钱够
+            //扣钱
+            userWalletService.subBalance(player_id,game.getPrice());
+            //开发商加钱
+            userWalletService.addBalance(game.getDeveloper_id(),game.getPrice());
+            //登记玩家拥有游戏
+            playerGameDao.addPlayerGame(player_id,game_id, DataUtil.timestamp(),1,1);
+
+            return new Result(Code.OK,null,"购买成功");
+        }else {//钱不够
+            return new Result(Code.ERR,null,"余额不足");
+
+        }
+
+    }
+
+    //获取玩家评分数据和大家评分数据
+    @GetMapping("/getRatingInfo/{game_id}")
+    public Result getRatingInfo(@PathVariable Integer game_id,HttpSession session) {
+        User user = (User) session.getAttribute("currentUser");
+        Integer player_id = user.getId();
+
+
+        HashMap<String, Object> myRating = new HashMap<>();
+
+        //获取玩家对于此游戏的评论
+        GameRating rating = gameRatingService.selectRatingByPlayerIdAndGameId(player_id, game_id);
+        if(rating!=null){
+            myRating.put("accept",1);
+            myRating.put("rating",rating.getRating());
+            myRating.put("comment",rating.getComment());
+        }else {
+            myRating.put("accept",0);
+            myRating.put("rating",null);
+            myRating.put("comment",null);
+        }
+        ArrayList<HashMap<String, Object>> ratingList = new ArrayList<>();
+        List<GameRating> oneGameRatingList = gameRatingService.selectRatingListByGameId(game_id);
+        for (GameRating element : oneGameRatingList) {
+            HashMap<String,Object> map=new HashMap<String,Object>();
+            map.put("rating",element.getRating());
+            map.put("comment",element.getComment());
+            map.put("is_exist",element.getIs_exist());
+            Integer tempPlayer_id=element.getPlayer_id();
+            Player player = playerService.getPlayerById(tempPlayer_id);
+            map.put("player_name",player.getNick_name());
+            ratingList.add(map);
+
+        }
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("myRating",myRating);
+        res.put("ratingList",ratingList);
+        return new Result(Code.OK,res,null);
+
+    }
+
+    @PutMapping("/putPlayerRating/{rating}/{comment}")
+    public Result putPlayerRating(@PathVariable Integer game_id,@PathVariable Integer rating,@PathVariable String comment,HttpSession session){
+        //添加评论
+        User user = (User) session.getAttribute("currentUser");
+        Integer player_id = user.getId();
+
+
+
+
+        return new Result(Code.OK,null,null);
+    }
+
+    @GetMapping("/getPlayerWallet")
+    public Result getPlayerWallet(HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        Integer user_id=user.getId();
+        UserWallet userWallet=userWalletService.getUserWallet(user_id);
+        return new Result(Code.OK,userWallet,null);
+    }
+
+    @PutMapping("/addBalance/{x}")
+    public Result addBalance(@PathVariable Double x,HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        Integer user_id=user.getId();
+        userWalletService.addBalance(user_id,x);
+        return new Result(Code.OK,null,null);
+    }
+
+    @GetMapping("/getTags/{game_id}")
+    public Result getTags(@PathVariable Integer game_id){
+        List<String> tags = tagService.selectTagNameByGameId(game_id);
+
+
+        return new Result(Code.OK,tags,null);
+    }
+
+
 
 
 }

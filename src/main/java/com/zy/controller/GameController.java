@@ -122,6 +122,17 @@ public class GameController {
         return new Result(Code.OK, gameList, null);
 
     }
+    //获取玩家拥有的游戏
+    @GetMapping("/getPlayerGameList")
+    public Result getPlayerGameList(HttpSession session) {
+
+        User user = (User) session.getAttribute("currentUser");
+        //开发商id
+        Integer id = user.getId();
+        ArrayList<HashMap<String,Object>> gameList= gameService.getPlayerGameList(id);
+        return new Result(Code.OK, gameList, null);
+
+    }
 
     @GetMapping("/getGameListByRatingDescending")
     public Result getGameListByRatingDescending(){

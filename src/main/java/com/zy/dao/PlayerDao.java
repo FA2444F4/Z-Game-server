@@ -25,4 +25,6 @@ public interface PlayerDao {
     @Select("select id from player")
     public List<Integer> selectPlayerIdList();
 
+
+
 }

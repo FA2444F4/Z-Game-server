@@ -1,8 +1,6 @@
 package com.zy;
 
-import com.zy.dao.GameDao;
-import com.zy.dao.GameRatingDao;
-import com.zy.dao.TagDao;
+import com.zy.dao.*;
 import com.zy.domain.Game;
 import com.zy.domain.User;
 import com.zy.service.GameRatingService;
@@ -24,6 +22,14 @@ public class DaoTest {
     private GameRatingDao game_rating;
     @Autowired
     private GameRatingService gameRatingService;
+
+    @Autowired
+    private PlayerGameDao playerGameDao;
+
+    @Autowired
+    private UserWalletDao userWalletDao;
+    @Autowired
+    private EssayDao essayDao;
 
     //测试lombok
     @Test
@@ -81,6 +87,22 @@ public class DaoTest {
     @Test
     void a7(){
         System.out.println(gameRatingService.getGameIdAndRatingFromOnePlayer(100001));
+    }
+
+    @Test
+    void a8(){
+        System.out.println(playerGameDao.selectPlayerGameByOne(100001,1));
+    }
+
+    @Test
+    void a9(){
+        userWalletDao.subBalance(100001,500.0);
+//        userWalletDao.addBalance(10001,500.0);
+    }
+
+    @Test
+    void a10(){
+        System.out.println(essayDao.getMessageByEssayId(2));
     }
 
 }

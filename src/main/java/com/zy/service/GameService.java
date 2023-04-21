@@ -41,6 +41,7 @@ public interface GameService {
      *  其他待定
      */
     public ArrayList<HashMap<String,Object>> selectAllGame();
+    public ArrayList<HashMap<String,Object>> getPlayerGameList(Integer player_id);
 
     //根据用户输入词模糊查询游戏
     public ArrayList<HashMap<String,Object>> selectGameByInput(String input);
@@ -57,4 +58,6 @@ public interface GameService {
     public List<Integer> selectGameIdList();
 
     public ArrayList<HashMap<String,Object>> getRecommendGameListByGameIdList(List<Integer> gameCountList);
+
+    public String getGameName(Integer id);
 }

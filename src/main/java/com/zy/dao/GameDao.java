@@ -25,6 +25,9 @@ public interface GameDao {
     @Select("select * from game")
     public List<Game> selectAllGame();
 
+    @Select("select name from game where id=#{id}")
+    public String getGameName(Integer id);
+
     @Select("select * from game where name like CONCAT('%',#{input},'%')")
     public List<Game> selectGameByInput(String input);
 

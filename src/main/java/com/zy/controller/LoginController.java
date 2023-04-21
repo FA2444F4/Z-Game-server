@@ -5,6 +5,7 @@ import com.zy.domain.Param;
 import com.zy.domain.Player;
 import com.zy.domain.User;
 import com.zy.service.UserService;
+import com.zy.service.UserWalletService;
 import com.zy.util.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -19,6 +20,9 @@ import java.util.Map;
 public class LoginController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserWalletService userWalletService;
 
     //登录
     @GetMapping("/{username}/{password}")
@@ -59,6 +63,9 @@ public class LoginController {
         user.setId(id);
         //添加session
         session.setAttribute("currentUser", user);
+        //创建用户钱包
+        userWalletService.initUserWallet(id);
+
         //让客户端跳转到首页
         return new Result(Code.OK, user, null);
     }
@@ -84,6 +91,9 @@ public class LoginController {
         user.setId(id);
         //添加session
         session.setAttribute("currentUser", user);
+
+        //创建用户钱包
+        userWalletService.initUserWallet(id);
         //让客户端跳转到首页
         return new Result(Code.OK, user, null);
     }
@@ -109,7 +119,16 @@ public class LoginController {
     //销毁session
     @GetMapping("/destorySession")
     public Result destorySession(Model model, HttpSession session) {
+        System.out.println("销毁");
         session.removeAttribute("currentUser");
         return new Result(Code.OK, null, null);
+    }
+
+    @GetMapping("/getUserType")
+    public Result loadForumHomeUserInfo(HttpSession session){
+        User user=(User) session.getAttribute("currentUser");
+        Integer type=user.getType();
+//        System.out.println("type"+type);
+        return new Result(Code.OK,type,null);
     }
 }

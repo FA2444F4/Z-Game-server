@@ -1,8 +1,10 @@
 package com.zy.util;
 
+
 import org.springframework.util.DigestUtils;
 
 public class DataUtil {
+
     //生成md5
     public static String MD5(String root){
         String pws = DigestUtils.md5DigestAsHex(root.getBytes());

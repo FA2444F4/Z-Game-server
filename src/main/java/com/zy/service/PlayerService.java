@@ -7,6 +7,7 @@ import com.zy.domain.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 public interface PlayerService {
@@ -33,5 +34,10 @@ public interface PlayerService {
     public Param getPlayerInfo(Integer id);
 
     public List<Integer> selectPlayerIdList();
+
+    public Map<String, Object> selectPlayerGameByOne(Integer player_id, Integer game_id);
+
+    //看玩家是否买了这个游戏,看玩家是否评分
+    public Map<String,Integer> buyAndRatingButtonInfo(Integer player_id, Integer game_id);
 
 }

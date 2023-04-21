@@ -1,5 +1,6 @@
 package com.zy.dao;
 
+import com.zy.domain.GameRating;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -30,5 +31,23 @@ public interface GameRatingDao {
     @Select("select game_id,rating from game_rating where player_id=#{player_id}")
     public List<Map<String,Integer>> getGameIdAndRatingFromOnePlayer(Integer player_id);
 
+    //根据玩家id搜索所有评论
+    @Select("select * from game_rating where player_id=#{player_id}")
+    public List<GameRating> selectRatingListFromOnePlayer(Integer player_id);
+
+
+    //根据玩家id搜索所有评论
+    @Select("select rating from game_rating where player_id=#{player_id} and game_id=#{game_id}")
+    public Integer selectIsRating(Integer player_id,Integer game_id);
+
+    @Select("select * from game_rating where player_id=#{player_id} and game_id=#{game_id}")
+    public GameRating selectRatingByPlayerIdAndGameId(Integer player_id, Integer game_id);
+
+    //根据游戏id搜索所有评论
+    @Select("select * from game_rating where game_id=#{game_id}")
+    public List<GameRating> selectRatingListByGameId(Integer game_id);
+
+
+//    public Integer addPlayerGameRating(Integer game_id,Integer player_id,Integer rating,String comment,Long create_time,Integer is_exist);
 
 }

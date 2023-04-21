@@ -2,6 +2,7 @@ package com.zy.service.impl;
 
 import com.zy.dao.GameDao;
 import com.zy.dao.Game_tagDao;
+import com.zy.dao.PlayerGameDao;
 import com.zy.domain.Game;
 import com.zy.service.GameRatingService;
 import com.zy.service.GameService;
@@ -21,6 +22,9 @@ public class GameServiceImpl implements GameService {
 
     @Autowired
     private GameRatingService gameRatingService;
+
+    @Autowired
+    private PlayerGameDao playerGameDao;
 
     @Override
     public Boolean addGameAndTag(Game game, List<Integer> selectTag) {
@@ -57,6 +61,47 @@ public class GameServiceImpl implements GameService {
         ArrayList<HashMap<String,Object>> gameList=new ArrayList<HashMap<String,Object>>();
         //搜索游戏基本信息
         List<Game> games = gameDao.selectAllGame();
+        for (Game game : games) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("game" ,game);
+            gameList.add(map);
+        }
+        //搜索游戏评分
+        for (HashMap<String, Object> listElement : gameList) {
+            Game game= (Game)listElement.get("game");
+            Integer gameId=game.getId();
+            //统计游戏所有评论的评分
+            //如果没有则为-1
+            //先搜索有几条评论
+            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            if (ratingNum==0){//如果没有评论
+                listElement.put("rating",-1);
+            }else {//如果有评论
+                //按评分排序时 5 4 3 2 1 //未评分数据分开列
+                //根据gameId搜索游戏评分
+                Double rating = gameRatingService.countRatingAvg(gameId);
+                listElement.put("rating",rating);
+            }
+        }
+        //把表给前端
+        return gameList;
+    }
+
+    //获取玩家拥有的游戏
+    @Override
+    public ArrayList<HashMap<String, Object>> getPlayerGameList(Integer player_id) {
+        ArrayList<HashMap<String,Object>> gameList=new ArrayList<HashMap<String,Object>>();
+        //搜索游戏基本信息
+//        List<Game> games = gameDao.selectAllGame();
+        List<Game> games=new ArrayList<Game>();
+        //先搜索已拥有游戏id
+        List<Integer> haveGameIdList = playerGameDao.selectPlayerGameId(player_id);
+        //根据游戏id搜索游戏
+        for (Integer game_id : haveGameIdList) {
+            Game game = gameDao.selectGameById(game_id);
+            games.add(game);
+        }
+
         for (Game game : games) {
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("game" ,game);
@@ -398,6 +443,11 @@ public class GameServiceImpl implements GameService {
         }
         //把表给前端
         return resList;
+    }
+
+    @Override
+    public String getGameName(Integer id) {
+        return gameDao.getGameName(id);
     }
 
 

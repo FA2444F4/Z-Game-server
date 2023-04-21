@@ -1,11 +1,9 @@
 package com.zy.controller;
 
-import com.zy.domain.Developer;
-import com.zy.domain.Param;
-import com.zy.domain.Player;
-import com.zy.domain.User;
+import com.zy.domain.*;
 import com.zy.service.DeveloperService;
 import com.zy.service.UserService;
+import com.zy.service.UserWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +16,8 @@ public class DeveloperController {
     private DeveloperService developerService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserWalletService userWalletService;
 
 
     @GetMapping("homeLoad")
@@ -54,5 +54,20 @@ public class DeveloperController {
         return new Result(Code.OK,null,null);
     }
 
+    @GetMapping("/getDeveloperWallet")
+    public Result getDeveloperWallet(HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        Integer user_id=user.getId();
+        UserWallet userWallet=userWalletService.getUserWallet(user_id);
+        return new Result(Code.OK,userWallet,null);
+    }
+
+    @PutMapping("/subBalance/{x}")
+    public Result addBalance(@PathVariable Double x,HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        Integer user_id=user.getId();
+        userWalletService.subBalance(user_id,x);
+        return new Result(Code.OK,null,null);
+    }
 
 }

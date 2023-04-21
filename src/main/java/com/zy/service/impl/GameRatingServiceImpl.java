@@ -2,6 +2,7 @@ package com.zy.service.impl;
 
 import com.zy.dao.GameDao;
 import com.zy.dao.GameRatingDao;
+import com.zy.domain.GameRating;
 import com.zy.service.GameRatingService;
 import com.zy.util.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,27 @@ public class GameRatingServiceImpl implements GameRatingService {
 
 
         return currentPlayerRatingMapList;
+    }
+
+    @Override
+    public List<GameRating> selectRatingListFromOnePlayer(Integer player_id) {
+        return gameRatingDao.selectRatingListFromOnePlayer(player_id);
+    }
+
+    @Override
+    public GameRating selectRatingByPlayerIdAndGameId(Integer player_id, Integer game_id) {
+        return gameRatingDao.selectRatingByPlayerIdAndGameId(player_id,game_id);
+    }
+
+    @Override
+    public List<GameRating> selectRatingListByGameId(Integer game_id) {
+        return gameRatingDao.selectRatingListByGameId(game_id);
+    }
+
+    @Override
+    public Integer addPlayerGameRating(Integer game_id, Integer player_id, Integer rating, String comment) {
+        Long create_time=DataUtil.timestamp();
+        Integer is_exist=1;
+        return gameRatingDao.insertRating(game_id,player_id,rating,comment,create_time,is_exist);
     }
 }
