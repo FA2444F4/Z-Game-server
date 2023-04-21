@@ -3,10 +3,7 @@ package com.zy.dao;
 import com.zy.domain.Administrator;
 import com.zy.domain.Player;
 import com.zy.domain.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -25,6 +22,7 @@ public interface PlayerDao {
     @Select("select id from player")
     public List<Integer> selectPlayerIdList();
 
-
+    @Delete("delete from player where id=#{user_id}")
+    public Integer deleteAccount(Integer user_id);
 
 }

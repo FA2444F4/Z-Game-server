@@ -105,4 +105,14 @@ public class GameRatingServiceImpl implements GameRatingService {
         Integer is_exist=1;
         return gameRatingDao.insertRating(game_id,player_id,rating,comment,create_time,is_exist);
     }
+
+    @Override
+    public HashMap<Integer, Integer> getGameRatingGrad(Integer game_id) {
+        HashMap<Integer, Integer> resMap = new HashMap<>();
+        for (int i=1;i<=5;i++){
+            resMap.put(i,gameRatingDao.getARatingNumForGame(game_id,i));
+        }
+
+        return resMap;
+    }
 }

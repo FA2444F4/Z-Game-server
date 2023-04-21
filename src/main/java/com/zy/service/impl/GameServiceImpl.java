@@ -83,6 +83,18 @@ public class GameServiceImpl implements GameService {
                 listElement.put("rating",rating);
             }
         }
+        //搜索各级评分
+        for (HashMap<String, Object> listElement : gameList) {
+            Game game= (Game)listElement.get("game");
+            Integer gameId=game.getId();
+            HashMap<Integer, Integer> gameRatingGrad = gameRatingService.getGameRatingGrad(gameId);
+            listElement.put("one",gameRatingGrad.get(1));
+            listElement.put("two",gameRatingGrad.get(2));
+            listElement.put("three",gameRatingGrad.get(3));
+            listElement.put("four",gameRatingGrad.get(4));
+            listElement.put("five",gameRatingGrad.get(5));
+
+        }
         //把表给前端
         return gameList;
     }
@@ -155,6 +167,18 @@ public class GameServiceImpl implements GameService {
                 listElement.put("rating",rating);
             }
         }
+        //搜索各级评分
+        for (HashMap<String, Object> listElement : gameList) {
+            Game game= (Game)listElement.get("game");
+            Integer gameId=game.getId();
+            HashMap<Integer, Integer> gameRatingGrad = gameRatingService.getGameRatingGrad(gameId);
+            listElement.put("one",gameRatingGrad.get(1));
+            listElement.put("two",gameRatingGrad.get(2));
+            listElement.put("three",gameRatingGrad.get(3));
+            listElement.put("four",gameRatingGrad.get(4));
+            listElement.put("five",gameRatingGrad.get(5));
+
+        }
         //把表给前端
         return gameList;
     }
@@ -204,7 +228,18 @@ public class GameServiceImpl implements GameService {
 //                return ((Double)o2.get("rating")).intValue() -((Double)o1.get("rating")).intValue();
             }
         });
+//搜索各级评分
+        for (HashMap<String, Object> listElement : gameList) {
+            Game game= (Game)listElement.get("game");
+            Integer gameId=game.getId();
+            HashMap<Integer, Integer> gameRatingGrad = gameRatingService.getGameRatingGrad(gameId);
+            listElement.put("one",gameRatingGrad.get(1));
+            listElement.put("two",gameRatingGrad.get(2));
+            listElement.put("three",gameRatingGrad.get(3));
+            listElement.put("four",gameRatingGrad.get(4));
+            listElement.put("five",gameRatingGrad.get(5));
 
+        }
 //        gameList.sort();
         //把表给前端
         return gameList;
@@ -248,7 +283,18 @@ public class GameServiceImpl implements GameService {
                 return DataUtil.makeNumberToInteger(o1.get("rating"))-DataUtil.makeNumberToInteger(o2.get("rating"));
             }
         });
+//搜索各级评分
+        for (HashMap<String, Object> listElement : gameList) {
+            Game game= (Game)listElement.get("game");
+            Integer gameId=game.getId();
+            HashMap<Integer, Integer> gameRatingGrad = gameRatingService.getGameRatingGrad(gameId);
+            listElement.put("one",gameRatingGrad.get(1));
+            listElement.put("two",gameRatingGrad.get(2));
+            listElement.put("three",gameRatingGrad.get(3));
+            listElement.put("four",gameRatingGrad.get(4));
+            listElement.put("five",gameRatingGrad.get(5));
 
+        }
 //        gameList.sort();
         //把表给前端
         return gameList;
@@ -292,7 +338,18 @@ public class GameServiceImpl implements GameService {
                 return bigGap;
             }
         });
+//搜索各级评分
+        for (HashMap<String, Object> listElement : gameList) {
+            Game game= (Game)listElement.get("game");
+            Integer gameId=game.getId();
+            HashMap<Integer, Integer> gameRatingGrad = gameRatingService.getGameRatingGrad(gameId);
+            listElement.put("one",gameRatingGrad.get(1));
+            listElement.put("two",gameRatingGrad.get(2));
+            listElement.put("three",gameRatingGrad.get(3));
+            listElement.put("four",gameRatingGrad.get(4));
+            listElement.put("five",gameRatingGrad.get(5));
 
+        }
 //        gameList.sort();
         //把表给前端
         return gameList;
@@ -336,7 +393,18 @@ public class GameServiceImpl implements GameService {
                 return bigGap;
             }
         });
+//搜索各级评分
+        for (HashMap<String, Object> listElement : gameList) {
+            Game game= (Game)listElement.get("game");
+            Integer gameId=game.getId();
+            HashMap<Integer, Integer> gameRatingGrad = gameRatingService.getGameRatingGrad(gameId);
+            listElement.put("one",gameRatingGrad.get(1));
+            listElement.put("two",gameRatingGrad.get(2));
+            listElement.put("three",gameRatingGrad.get(3));
+            listElement.put("four",gameRatingGrad.get(4));
+            listElement.put("five",gameRatingGrad.get(5));
 
+        }
 //        gameList.sort();
         //把表给前端
         return gameList;

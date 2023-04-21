@@ -50,4 +50,10 @@ public interface GameRatingDao {
 
 //    public Integer addPlayerGameRating(Integer game_id,Integer player_id,Integer rating,String comment,Long create_time,Integer is_exist);
 
+    @Delete("delete from game_rating where player_id=#{user_id}")
+    public Integer deleteAccount(Integer user_id);
+
+    @Select("SELECT COUNT(*) FROM game_rating WHERE rating=#{rating} AND game_id=#{game_id}")
+    public Integer getARatingNumForGame(Integer game_id,Integer rating);
+
 }

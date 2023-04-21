@@ -4,6 +4,7 @@ import com.zy.domain.GameRating;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,8 @@ public interface GameRatingService {
     public List<GameRating> selectRatingListByGameId(Integer game_id);
 
     public Integer addPlayerGameRating(Integer game_id,Integer player_id,Integer rating,String comment);
+
+    public HashMap<Integer,Integer> getGameRatingGrad(Integer game_id);
 
 
 }

@@ -2,10 +2,7 @@ package com.zy.dao;
 
 import com.zy.domain.Essay;
 import com.zy.domain.EssayMessage;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -60,6 +57,14 @@ public interface EssayDao {
                             Integer essay_id,
                             String message);
 
+
+
+
+    @Delete("delete from essay_message where messenger_id=#{user_id}")
+    public Integer deleteAccountMessage(Integer user_id);
+
+    @Delete("delete from essay where publisher_id=#{user_id}")
+    public Integer deleteAccountEssay(Integer user_id);
 
 
 }

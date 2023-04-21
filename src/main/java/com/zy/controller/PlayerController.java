@@ -96,6 +96,8 @@ public class PlayerController {
         return new Result(Code.OK, gameList.subList(1, 5), null);
     }
 
+
+    //游戏推荐算法1
     @GetMapping("/getRecommendGameList")
     public Result getRecommendGameList(HttpSession session) {
         //获取当前玩家的 评分数组
@@ -184,6 +186,15 @@ public class PlayerController {
 
         return new Result(Code.OK, gameList, null);
     }
+
+    //游戏推荐算法2
+    /*
+    ①当玩家评价游戏较少时tag占比权重大
+    ②当评价较多时自己权重大
+     */
+
+
+
 
     @GetMapping("/selectPlayerGameByOne/{game_id}")
     public Result selectPlayerGameByOne(@PathVariable Integer game_id,HttpSession session) {

@@ -2,10 +2,8 @@ package com.zy.dao;
 
 import com.zy.domain.Administrator;
 import com.zy.domain.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
 //
 @Mapper
 public interface UserDao {
@@ -26,6 +24,9 @@ public interface UserDao {
 
     @Update("update user set username=#{username},password=#{password} where id=#{id}")
     public Integer updateUserInfo(User user);
+
+    @Delete("delete from user where id=#{user_id}")
+    public Integer deleteAccount(Integer user_id);
 
 
 }

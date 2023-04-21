@@ -1,9 +1,6 @@
 package com.zy.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.MapKey;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,5 +23,8 @@ public interface PlayerGameDao {
     //增加游戏
     @Insert("insert into player_game values(#{player_id},#{game_id},#{create_time},#{status},#{is_have})")
     public Integer addPlayerGame(Integer player_id,Integer game_id,Long create_time,Integer status,Integer is_have);
+
+    @Delete("delete from player_game where player_id=#{user_id}")
+    public Integer deleteAccount(Integer user_id);
 
 }
