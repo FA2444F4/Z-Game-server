@@ -24,8 +24,6 @@ public interface UserWalletDao {
 
     //删除账号
     @Delete("delete from user_wallet where user_id=#{user_id}")
-    public void deleteAccount(){
-
-    }
+    public void deleteAccount(Integer user_id);
 
 }
