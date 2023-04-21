@@ -3,10 +3,7 @@ package com.zy.dao;
 import com.zy.domain.Tag;
 import com.zy.domain.User;
 import com.zy.domain.UserWallet;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @Mapper
@@ -26,5 +23,9 @@ public interface UserWalletDao {
     public void addBalance(Integer user_id,Double x );
 
     //删除账号
+    @Delete("delete from user_wallet where user_id=#{user_id}")
+    public void deleteAccount(){
+
+    }
 
 }
