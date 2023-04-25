@@ -192,6 +192,75 @@ public class PlayerController {
     ①当玩家评价游戏较少时tag占比权重大
     ②当评价较多时自己权重大
      */
+    @GetMapping("/getRecommendGameListPlus")
+    public Result getRecommendGameListPlus(HttpSession session) {
+        ////////////////////////////////////////////////////////////////
+        ////                         计算用户相关度               ////////////
+        ////////////////////////////////////////////////////////////////
+        //获取当前玩家评分数组
+        User user = (User) session.getAttribute("currentUser");
+        Integer mine_id = user.getId();
+        ArrayList<Map<String, Integer>> self_rating_list = gameRatingService.getGameIdAndRatingFromOnePlayer(mine_id);
+        //获取每个人的id
+        List<Integer> all_player_id_list = playerService.selectPlayerIdList();
+        //初始化相关度表
+        ArrayList<Map<String, Object>> correlation_list = new ArrayList<>();
+        for (Integer one_player_id : all_player_id_list) {
+            if (!one_player_id.equals(mine_id)) {//别和自己算相似度
+                ArrayList<Map<String, Integer>> other_rating_list = gameRatingService.getGameIdAndRatingFromOnePlayer(one_player_id);
+                Double pearsonCorrelation = Recommend.getPearsonCorrelationFromArrayList(self_rating_list, other_rating_list);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("player_id", one_player_id);
+                map.put("pearsonCorrelation", pearsonCorrelation);
+                correlation_list.add(map);
+            }
+        }
+        //按相关度从高到低排序
+        Collections.sort(correlation_list, new Comparator<Map<String, Object>>() {
+            @Override
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+
+                Double correlation1 = ((Double) o1.get("pearsonCorrelation"));
+                Double correlation2 = ((Double) o2.get("pearsonCorrelation"));
+//                return DataUtil.makeNumberToInteger(correlation1)-DataUtil.makeNumberToInteger(correlation2);
+                if (correlation1 > correlation2) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        //到此,获得了相关度从高到低的玩家id和相关度
+
+        //从相关度高于0.5的玩家中找出好评游戏,可以组成一个
+        /*
+        List<Map<String,Object>> high_correlation_player_rating_list
+        其中key为:
+        ①游戏id
+        ②这些玩家对该游戏的评分总和
+         */
+        ArrayList<HashMap<String, Integer>> high_correlation_player_rating_list = new ArrayList<>();
+        List<Integer> gameIdList = gameService.selectGameIdList();
+        for (Integer game_id : gameIdList) {
+            HashMap<String, Integer> tempMap = new HashMap<>();
+            tempMap.put("game_id", game_id);
+            tempMap.put("sum", 0);
+            high_correlation_player_rating_list.add(tempMap);
+        }
+        //从中筛选游戏
+        //两个筛选角度
+        //①与玩家喜欢游戏的tag相关度
+        //②sum较高游戏
+
+
+        //待处理
+
+
+
+
+
+        return null;
+    }
 
 
 
