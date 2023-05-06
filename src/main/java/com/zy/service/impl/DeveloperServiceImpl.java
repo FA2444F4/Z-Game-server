@@ -19,7 +19,7 @@ public class DeveloperServiceImpl implements DeveloperService {
     private UserDao userDao;
 
     @Override
-    public Developer getDeveloperById(Integer id) {
+    public Developer getDeveloperById(Long id) {
         return developerDao.getDeveloperById(id);
     }
 
@@ -32,7 +32,7 @@ public class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Param getDeveloperInfo(Integer id) {
+    public Param getDeveloperInfo(Long id) {
         User user = userDao.getUserById(id);
         Developer developer = developerDao.getDeveloperById(id);
         Param param = new Param();

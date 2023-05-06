@@ -10,7 +10,7 @@ import java.util.List;
 public interface EssayDao {
     @Insert("insert into essay (id,publisher_id,publisher_name,create_time,essay_name,essay_comment,likes) values(null,#{publisher_id},#{publisher_name},#{create_time},#{essay_name},#{essay_comment},#{likes})")
     public Integer addEssay(Integer id,
-                            Integer publisher_id,
+                            Long publisher_id,
                             String publisher_name,
                             Long create_time,
                             String essay_name,
@@ -39,7 +39,7 @@ public interface EssayDao {
     public Essay selectEssayById(Integer id);
 
     @Select("select * from essay where publisher_id=#{user_id}")
-    public List<Essay> selectEssayByPublisherId(Integer user_id);
+    public List<Essay> selectEssayByPublisherId(Long user_id);
 
     @Select("select * from essay where id=#{id}")
     public Essay getEssayById(Integer id);
@@ -51,7 +51,7 @@ public interface EssayDao {
 
     @Insert("insert into essay_message (id,messenger_id,messenger_name,create_time,essay_id,message) values(null,#{messenger_id},#{messenger_name},#{create_time},#{essay_id},#{message})")
     public Integer addMessage(
-                            Integer messenger_id,
+            Long messenger_id,
                             String  messenger_name,
                             Long create_time,
                             Integer essay_id,
@@ -61,10 +61,10 @@ public interface EssayDao {
 
 
     @Delete("delete from essay_message where messenger_id=#{user_id}")
-    public Integer deleteAccountMessage(Integer user_id);
+    public Integer deleteAccountMessage(Long user_id);
 
     @Delete("delete from essay where publisher_id=#{user_id}")
-    public Integer deleteAccountEssay(Integer user_id);
+    public Integer deleteAccountEssay(Long user_id);
 
 
 }

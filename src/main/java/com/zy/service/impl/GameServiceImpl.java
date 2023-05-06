@@ -1,12 +1,11 @@
 package com.zy.service.impl;
 
-import com.zy.dao.GameDao;
-import com.zy.dao.Game_tagDao;
-import com.zy.dao.PlayerGameDao;
+import com.zy.dao.*;
 import com.zy.domain.Game;
 import com.zy.service.GameRatingService;
 import com.zy.service.GameService;
 import com.zy.util.DataUtil;
+import com.zy.util.Recommend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,11 @@ public class GameServiceImpl implements GameService {
     private GameRatingService gameRatingService;
 
     @Autowired
+    private GameRatingDao gameRatingDao;
+    @Autowired
     private PlayerGameDao playerGameDao;
+    @Autowired
+    private TagDao tagDao;
 
     @Override
     public Boolean addGameAndTag(Game game, List<Integer> selectTag) {
@@ -39,7 +42,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<Game> getGameListByDeveloperId(Integer id) {
+    public List<Game> getGameListByDeveloperId(Long id) {
         List<Game> gameList = gameDao.getGameListByDeveloperId(id);
 
         return gameList;
@@ -73,13 +76,13 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -101,7 +104,7 @@ public class GameServiceImpl implements GameService {
 
     //获取玩家拥有的游戏
     @Override
-    public ArrayList<HashMap<String, Object>> getPlayerGameList(Integer player_id) {
+    public ArrayList<HashMap<String, Object>> getPlayerGameList(Long player_id) {
         ArrayList<HashMap<String,Object>> gameList=new ArrayList<HashMap<String,Object>>();
         //搜索游戏基本信息
 //        List<Game> games = gameDao.selectAllGame();
@@ -126,13 +129,13 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -157,13 +160,13 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -201,7 +204,7 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
                 //temp,生成随机评论值
@@ -209,7 +212,7 @@ public class GameServiceImpl implements GameService {
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -263,7 +266,7 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
                 //temp,生成随机评论值
@@ -271,7 +274,7 @@ public class GameServiceImpl implements GameService {
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -317,7 +320,7 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
                 //temp,生成随机评论值
@@ -325,7 +328,7 @@ public class GameServiceImpl implements GameService {
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -373,7 +376,7 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
                 //temp,生成随机评论值
@@ -381,7 +384,7 @@ public class GameServiceImpl implements GameService {
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -458,13 +461,13 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -499,13 +502,13 @@ public class GameServiceImpl implements GameService {
             //统计游戏所有评论的评分
             //如果没有则为-1
             //先搜索有几条评论
-            Integer ratingNum=gameRatingService.countRatingNum(gameId);
+            Integer ratingNum=gameRatingDao.countRatingNum(gameId);
             if (ratingNum==0){//如果没有评论
                 listElement.put("rating",-1);
             }else {//如果有评论
                 //按评分排序时 5 4 3 2 1 //未评分数据分开列
                 //根据gameId搜索游戏评分
-                Double rating = gameRatingService.countRatingAvg(gameId);
+                Double rating = gameRatingDao.countRatingAvg(gameId);
                 listElement.put("rating",rating);
             }
         }
@@ -516,6 +519,85 @@ public class GameServiceImpl implements GameService {
     @Override
     public String getGameName(Integer id) {
         return gameDao.getGameName(id);
+    }
+
+    @Override
+    public List<Integer> getTagSimilarity(List<Integer> currentTagIdList,List<Integer> ultraGamdIdList,Integer tagSlotNum) {
+         //游戏id列表
+        List<Integer> gameIdList = gameDao.selectGameIdList();
+        //游戏数量
+        Integer gameNum=gameIdList.size();
+        //标签id列表
+        List<Integer> tagIdList = tagDao.selectTagIdList();
+        //标签数量
+        Integer tagNum=tagIdList.size();
+        //当前tagIdArray
+        Integer[] currentTagArr=new Integer[tagNum];
+        for (int i = 0; i < currentTagArr.length; i++) {
+            currentTagArr[i]=0;
+        }
+        for (Integer tag_id : currentTagIdList) {
+            currentTagArr[tagIdList.indexOf(tag_id)]=1;
+        }
+
+        //Matrix
+        Integer[][] array = new Integer[gameNum][tagNum];
+        for (int i = 0; i < gameNum; i++) {
+            for (Integer j = 0; j < tagNum; j++) {
+                array[i][j]=0;
+            }
+        }
+        //搜索每个游戏的tag
+        for (Integer game_id : gameIdList) {
+            Integer x=gameIdList.indexOf(game_id);
+            List<Integer> tempTagIdList = tagDao.selectTagIdListFromGame(game_id);
+            for (Integer tag_id : tempTagIdList) {
+                Integer y=tagIdList.indexOf(tag_id);
+                array[x][y]=1;
+            }
+        }
+
+        //相似度表          gameSimilarityMap<game_id,相似度>
+        HashMap<Integer,Double> gameSimilarityMap=new HashMap<>();
+        //记得跳过,List<Integer> ultraGamdIdList中的游戏
+        //tagIdList逐渐与每个游戏比相似度
+        for (int i = 0; i < array.length; i++) {
+            //过滤掉已经在游戏列表里的游戏
+            if(!ultraGamdIdList.contains(gameIdList.get(i))){
+                //计算array[i]和Integer[] currentTagArr的相似度//
+                /////////////////////////////////////////////////////////
+                /*System.out.println("currentTagArr");
+                for (Integer temp : currentTagArr) {
+                    System.out.print(temp+",");
+                }
+                System.out.println();
+                System.out.println("array[i]");
+                for (int i1 = 0; i1 < array[i].length; i1++) {
+                    System.out.print(array[i][i1]+",");
+                }
+                System.out.println();*/
+                ///////////////////////////////////////////////////
+
+                double similarity = Recommend.pearsonCorrelationInteger(currentTagArr, array[i]);
+                //并加入map
+               gameSimilarityMap.put(gameIdList.get(i),similarity);
+            }
+        }
+//
+        List<Integer> resGameIdList=new ArrayList<>();
+        Integer count=tagSlotNum;
+        // 使用Stream API对HashMap进行排序，并输出前x个元素到控制台
+        gameSimilarityMap.entrySet().stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .limit(count)
+                .forEach(entry -> {
+                    resGameIdList.add(entry.getKey());
+//                    System.out.println(entry.getKey() + ": " + entry.getValue());
+                });
+
+//        System.out.println("resGameIdList");
+//        System.out.println(resGameIdList);
+        return resGameIdList;
     }
 
 

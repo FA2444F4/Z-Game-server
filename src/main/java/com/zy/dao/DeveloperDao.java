@@ -14,7 +14,7 @@ public interface DeveloperDao {
     public Integer addDeveloper(Developer developer);
 
     @Select("SELECT * FROM developer WHERE id=#{id}")
-    public com.zy.domain.Developer getDeveloperById(Integer id);
+    public com.zy.domain.Developer getDeveloperById(Long id);
 
     @Update("update developer set deposit=#{deposit},name=#{name},phone=#{phone},description=#{description} where id=#{id}")
     public Integer updateDeveloperInfo(Developer developer);

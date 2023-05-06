@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean addUserAndPlayer(User user, Player player) {
         userDao.AddUser(user);
-        Integer id = userDao.getIdByUsername(user.getUsername());
+        Long id = userDao.getIdByUsername(user.getUsername());
         player.setId(id);
         playerDao.addPlayer(player);
 
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean addUserAndDeveloper(User user, Developer developer) {
         userDao.AddUser(user);
-        Integer id = userDao.getIdByUsername(user.getUsername());
+        Long id = userDao.getIdByUsername(user.getUsername());
         developer.setId(id);
         developerDao.addDeveloper(developer);
 
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer selectUserIdByUsername(String username) {
+    public Long selectUserIdByUsername(String username) {
         return userDao.getIdByUsername(username);
     }
 }

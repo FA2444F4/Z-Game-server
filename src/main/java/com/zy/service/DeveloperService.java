@@ -13,7 +13,7 @@ public interface DeveloperService {
      * @param id
      * @return
      */
-    public Developer getDeveloperById(Integer id);
+    public Developer getDeveloperById(Long id);
 
     /**
      * 修改开发商的developer和user
@@ -28,5 +28,5 @@ public interface DeveloperService {
      * @param id
      * @return
      */
-    public Param getDeveloperInfo(Integer id);
+    public Param getDeveloperInfo(Long id);
 }

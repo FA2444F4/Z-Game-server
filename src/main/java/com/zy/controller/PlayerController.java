@@ -45,14 +45,14 @@ public class PlayerController {
         //是玩家
         //找到玩家数据
         Player player = playerService.getPlayerById(user.getId());
-        Integer id = user.getId();
+        Long id = user.getId();
         Param param = playerService.getPlayerInfo(id);
         return new Result(Code.OK, param, "玩家[" + player.getNick_name() + "],您好!");
     }
 
     @GetMapping("/checkDuplicateUsername/{username}")
     public Result checkDuplicateUsername(@PathVariable String username) {
-        Integer id = userService.selectUserIdByUsername(username);
+        Long id = userService.selectUserIdByUsername(username);
         return new Result(Code.OK, id, null);
 
     }
@@ -71,7 +71,7 @@ public class PlayerController {
     @GetMapping("/ifPlayerRatingNumberEnough")
     public Result ifPlayerRatingNumberEnough(HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
-        Integer id = user.getId();
+        Long id = user.getId();
 
         return new Result(Code.OK, gameRatingService.ifPlayerRatingNumberEnough(id) == true ? 1 : 0, null);
 
@@ -81,10 +81,10 @@ public class PlayerController {
     @PutMapping("/playerSubmitRating")
     public Result playerSubmitRating(@RequestBody ArrayList<Map<String, Integer>> ratingList, HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
-        Integer player_id = user.getId();
-        /*for (Map<String, Integer> element : ratingList) {
+        Long player_id = user.getId();
+        for (Map<String, Integer> element : ratingList) {
             System.out.println(element.get("id")+","+element.get("rating"));
-        }*/
+        }
         //让server带着ArrayList<Map<String,Integer>>和player去修改评论
         gameRatingService.createOrUpdatePlayerRating(ratingList, player_id);
         return new Result(Code.OK, null, null);
@@ -102,15 +102,15 @@ public class PlayerController {
     public Result getRecommendGameList(HttpSession session) {
         //获取当前玩家的 评分数组
         User user = (User) session.getAttribute("currentUser");
-        Integer player_id = user.getId();
+        Long player_id = user.getId();
         //selfRatingList map<游戏id,评分>
         ArrayList<Map<String, Integer>> selfRatingList = gameRatingService.getGameIdAndRatingFromOnePlayer(player_id);
         //依次获得每个人的评分数组,然后去计算
-        List<Integer> playerIdList = playerService.selectPlayerIdList();
+        List<Long> playerIdList = playerService.selectPlayerIdList();
         //创建相关度初始值表[<id,相关度>]
         ArrayList<Map<String, Object>> correlationList = new ArrayList<>();
         //用户与每个其他用户计算相关度
-        for (Integer otherPlayerId : playerIdList) {
+        for (Long otherPlayerId : playerIdList) {
             if (!otherPlayerId.equals(player_id)) {//别和自己算
                 ArrayList<Map<String, Integer>> otherRatingList = gameRatingService.getGameIdAndRatingFromOnePlayer(otherPlayerId);
                 Double pearsonCorrelation = Recommend.getPearsonCorrelationFromArrayList(selfRatingList, otherRatingList);
@@ -150,7 +150,7 @@ public class PlayerController {
         }
         //取前五名的游戏评分
         for (int i = 0; i < 5; i++) {
-            Integer otherplayerId = (Integer) (correlationList.get(i).get("player_id"));
+            Long otherplayerId = (Long) (correlationList.get(i).get("player_id"));
             ArrayList<Map<String, Integer>> otherRatingList = gameRatingService.getGameIdAndRatingFromOnePlayer(otherplayerId);
             for (Map<String, Integer> otherMap : otherRatingList) {
                 //判断评分
@@ -188,10 +188,10 @@ public class PlayerController {
     }
 
     //游戏推荐算法2
-    /*
-    ①当玩家评价游戏较少时tag占比权重大
-    ②当评价较多时自己权重大
-     */
+    
+    /*①当玩家评价游戏较少时tag占比权重大
+    ②当评价较多时自己权重大*/
+     
     @GetMapping("/getRecommendGameListPlus")
     public Result getRecommendGameListPlus(HttpSession session) {
         ////////////////////////////////////////////////////////////////
@@ -199,13 +199,13 @@ public class PlayerController {
         ////////////////////////////////////////////////////////////////
         //获取当前玩家评分数组
         User user = (User) session.getAttribute("currentUser");
-        Integer mine_id = user.getId();
+        Long mine_id = user.getId();
         ArrayList<Map<String, Integer>> self_rating_list = gameRatingService.getGameIdAndRatingFromOnePlayer(mine_id);
         //获取每个人的id
-        List<Integer> all_player_id_list = playerService.selectPlayerIdList();
+        List<Long> all_player_id_list = playerService.selectPlayerIdList();
         //初始化相关度表
         ArrayList<Map<String, Object>> correlation_list = new ArrayList<>();
-        for (Integer one_player_id : all_player_id_list) {
+        for (Long one_player_id : all_player_id_list) {
             if (!one_player_id.equals(mine_id)) {//别和自己算相似度
                 ArrayList<Map<String, Integer>> other_rating_list = gameRatingService.getGameIdAndRatingFromOnePlayer(one_player_id);
                 Double pearsonCorrelation = Recommend.getPearsonCorrelationFromArrayList(self_rating_list, other_rating_list);
@@ -230,36 +230,145 @@ public class PlayerController {
                 }
             }
         });
+        /*System.out.println("correlation_list");
+        System.out.println(correlation_list);*/
         //到此,获得了相关度从高到低的玩家id和相关度
 
         //从相关度高于0.5的玩家中找出好评游戏,可以组成一个
-        /*
-        List<Map<String,Object>> high_correlation_player_rating_list
-        其中key为:
+        
+//        List<Map<String,Object>> high_correlation_player_rating_list
+        /*其中key为:
         ①游戏id
-        ②这些玩家对该游戏的评分总和
-         */
-        ArrayList<HashMap<String, Integer>> high_correlation_player_rating_list = new ArrayList<>();
+        ②这些玩家对该游戏的评分总和*/
+
+        //game_id:sum
+        HashMap<Integer, Integer> gameRatingSumMap = new HashMap<>();
+//        ArrayList<HashMap<String, Integer>> high_correlation_player_rating_list = new ArrayList<>();
         List<Integer> gameIdList = gameService.selectGameIdList();
+        //初始化高相关度玩家对于游戏评分总和
         for (Integer game_id : gameIdList) {
-            HashMap<String, Integer> tempMap = new HashMap<>();
+            /*HashMap<String, Integer> tempMap = new HashMap<>();
             tempMap.put("game_id", game_id);
             tempMap.put("sum", 0);
-            high_correlation_player_rating_list.add(tempMap);
+            high_correlation_player_rating_list.add(tempMap);*/
+            gameRatingSumMap.put(game_id,0);
         }
+        Integer selfRatingCount=0;
+        //去除当前玩家已有游戏的id
+        for (Map<String, Integer> map : self_rating_list) {
+            Integer game_id=map.get("game_id");
+            Integer rating=map.get("rating");
+            if(rating>=1&&rating<=5){
+                selfRatingCount++;
+                gameRatingSumMap.remove(game_id);
+            }
+        }
+        //添加评分到sum
+        //找出高相关度玩家
+        for (Map<String, Object> map : correlation_list) {
+            Long player_id=(long)map.get("player_id");
+            Double correlation=(double)map.get("pearsonCorrelation");
+            if(correlation>0){//如果是相关人士
+                //找出他们对游戏的评分列表
+                List<HashMap<String, Integer>> pointList = gameRatingService.getNewPointAndGame(player_id);
+                for (HashMap<String, Integer> pointMap : pointList) {
+                    Integer game_id=pointMap.get("game_id");
+                    Integer rating=pointMap.get("rating");
+                    //找到当前游戏
+                    for (Map.Entry<Integer, Integer> entry : gameRatingSumMap.entrySet()) {
+                        Integer temp_game_id = entry.getKey();
+                        Integer temp_sum = entry.getValue();
+                        if(temp_game_id.equals(game_id)){//如果是这个游戏
+                            Integer x=(int)(10*correlation);
+                            gameRatingSumMap.put(temp_game_id,temp_sum+rating*x);//防止全是低相关的
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        /*System.out.println("gameRatingSumMap");
+        System.out.println(gameRatingSumMap);*/
         //从中筛选游戏
         //两个筛选角度
         //①与玩家喜欢游戏的tag相关度
         //②sum较高游戏
 
+        //最终游戏id列表
+        List<Integer> ultraGamdIdList=new ArrayList<Integer>();
 
-        //待处理
+        //按照玩家已经评价的数量决定tag的权重
+        Integer peopleSlotNum=0;
+        Integer tagSlotNum=0;
+        if(selfRatingCount>=20){
+            peopleSlotNum=5;
+            tagSlotNum=1;
+        }else if(selfRatingCount>=15){
+            peopleSlotNum=4;
+            tagSlotNum=2;
+        }else if(selfRatingCount>=10){
+            peopleSlotNum=3;
+            tagSlotNum=3;
+        }else if(selfRatingCount>=5){
+            peopleSlotNum=2;
+            tagSlotNum=4;
+        }
+
+        //添加peopleSlotNum
+        // 假设已经向gameRatingSumMap中添加了一些键值对
+        // 创建一个PriorityQueue，使用Comparator来按照值的大小进行排序
+        PriorityQueue<Map.Entry<Integer, Integer>> queue = new PriorityQueue<>((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
+        // 将HashMap中的键值对放入PriorityQueue中
+        for (Map.Entry<Integer, Integer> entry : gameRatingSumMap.entrySet()) {
+            queue.offer(entry);
+        }
+        // 从PriorityQueue中取出前N个键
+//        List<Integer> topNKeys = new ArrayList<>();
+        // 获取前peopleSlotNum个键
+        for (int i = 0; i < peopleSlotNum; i++) {
+//            topNKeys.add(queue.poll().getKey());
+            ultraGamdIdList.add(queue.poll().getKey());
+        }
+
+        /*System.out.println("ultraGamdIdList");
+        System.out.println(ultraGamdIdList);*/
+
+        //tag
+        List<Integer> tagIdList=new ArrayList<Integer>();
+        //找出玩家评论过正评分的游戏
+        for (Map<String, Integer> map : self_rating_list) {
+            Integer rating=map.get("rating");
+            Integer game_id=map.get("game_id");
+            if(rating>=4){
+                //找出游戏的tagId
+                for (Integer tagId : tagService.selectTagIdListFromGame(game_id)) {
+                    if(!tagIdList.contains(tagId))
+                        tagIdList.add(tagId);
+                }
+            }
+        }
+        /*System.out.println("tagIdList");
+        System.out.println(tagIdList);*/
+
+
+        //tagIdList [23, 28, 1, 25, 2, 3]
+        //找tag相似度高的游戏
+        //输入当前tagIdList [23, 28, 1, 25, 2, 3]
+        //返回相似度列表
+        List<Integer> tagSimilarityIdList = gameService.getTagSimilarity(tagIdList, ultraGamdIdList, tagSlotNum);
+        for (Integer game_id : tagSimilarityIdList) {
+            ultraGamdIdList.add(game_id);
+        }
+
+        /*System.out.println("ultraGamdIdList");
+        System.out.println(ultraGamdIdList);*/
+
+
+        ArrayList<HashMap<String, Object>> gameList = gameService.getRecommendGameListByGameIdList(ultraGamdIdList);
 
 
 
-
-
-        return null;
+        return new Result(Code.OK, gameList, null);
     }
 
 
@@ -268,7 +377,7 @@ public class PlayerController {
     @GetMapping("/selectPlayerGameByOne/{game_id}")
     public Result selectPlayerGameByOne(@PathVariable Integer game_id,HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
-        Integer id = user.getId();
+        Long id = user.getId();
         return new Result(Code.OK,playerService.selectPlayerGameByOne(id,game_id) , null);
 
     }
@@ -277,7 +386,7 @@ public class PlayerController {
     @GetMapping("/getPlayerRatingList")
     public Result selectPlayerGameByOne(HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
-        Integer id = user.getId();
+        Long id = user.getId();
         ArrayList<HashMap<String,Object>> ratingList = new ArrayList<>();
         List<GameRating> rawRatingList = gameRatingService.selectRatingListFromOnePlayer(id);
         for (GameRating element : rawRatingList) {
@@ -300,7 +409,7 @@ public class PlayerController {
     @GetMapping("/buyAndRatingButtonInfo/{game_id}")
     public Result buyAndRatingButtonInfo(@PathVariable Integer game_id,HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
-        Integer id = user.getId();
+        Long id = user.getId();
 
         return new Result(Code.OK,playerService.buyAndRatingButtonInfo(id,game_id) , null);
 
@@ -310,7 +419,7 @@ public class PlayerController {
     @GetMapping("/playerBuyGame/{game_id}")
     public Result playerBuyGame(@PathVariable Integer game_id,HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
-        Integer player_id = user.getId();
+        Long player_id = user.getId();
         UserWallet wallet = userWalletService.getUserWallet(player_id);
         Game game = gameService.selectGameById(game_id);
         //判断钱够不够
@@ -334,7 +443,7 @@ public class PlayerController {
     @GetMapping("/getRatingInfo/{game_id}")
     public Result getRatingInfo(@PathVariable Integer game_id,HttpSession session) {
         User user = (User) session.getAttribute("currentUser");
-        Integer player_id = user.getId();
+        Long player_id = user.getId();
 
 
         HashMap<String, Object> myRating = new HashMap<>();
@@ -352,15 +461,21 @@ public class PlayerController {
         }
         ArrayList<HashMap<String, Object>> ratingList = new ArrayList<>();
         List<GameRating> oneGameRatingList = gameRatingService.selectRatingListByGameId(game_id);
+        //评论数据量太大,最多保留100条
+        int count=30;
         for (GameRating element : oneGameRatingList) {
             HashMap<String,Object> map=new HashMap<String,Object>();
             map.put("rating",element.getRating());
             map.put("comment",element.getComment());
             map.put("is_exist",element.getIs_exist());
-            Integer tempPlayer_id=element.getPlayer_id();
+            Long tempPlayer_id=element.getPlayer_id();
             Player player = playerService.getPlayerById(tempPlayer_id);
             map.put("player_name",player.getNick_name());
             ratingList.add(map);
+            count--;
+            if (count<=0){
+                break;
+            }
 
         }
         HashMap<String, Object> res = new HashMap<>();
@@ -374,7 +489,7 @@ public class PlayerController {
     public Result putPlayerRating(@PathVariable Integer game_id,@PathVariable Integer rating,@PathVariable String comment,HttpSession session){
         //添加评论
         User user = (User) session.getAttribute("currentUser");
-        Integer player_id = user.getId();
+        Long player_id = user.getId();
 
 
 
@@ -385,7 +500,7 @@ public class PlayerController {
     @GetMapping("/getPlayerWallet")
     public Result getPlayerWallet(HttpSession session){
         User user = (User) session.getAttribute("currentUser");
-        Integer user_id=user.getId();
+        Long user_id=user.getId();
         UserWallet userWallet=userWalletService.getUserWallet(user_id);
         return new Result(Code.OK,userWallet,null);
     }
@@ -393,7 +508,7 @@ public class PlayerController {
     @PutMapping("/addBalance/{x}")
     public Result addBalance(@PathVariable Double x,HttpSession session){
         User user = (User) session.getAttribute("currentUser");
-        Integer user_id=user.getId();
+        Long user_id=user.getId();
         userWalletService.addBalance(user_id,x);
         return new Result(Code.OK,null,null);
     }

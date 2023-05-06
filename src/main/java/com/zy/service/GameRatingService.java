@@ -25,29 +25,37 @@ public interface GameRatingService {
     public Integer countRatingNum(Integer game_id);
 
 
-    public Boolean ifPlayerRatingNumberEnough(Integer player_id);
+    public Boolean ifPlayerRatingNumberEnough(Long player_id);
+
 
     /**
      * 没有评分则创建,有则修改
      */
-    public void createOrUpdatePlayerRating(ArrayList<Map<String,Integer>> ratingList,Integer player_id);
+    public void createOrUpdatePlayerRating(ArrayList<Map<String,Integer>> ratingList,Long player_id);
 
     /*
     根据玩家id搜他的游戏评分数据
      */
-    public ArrayList<Map<String,Integer>> getGameIdAndRatingFromOnePlayer(Integer player_id);
+    public ArrayList<Map<String,Integer>> getGameIdAndRatingFromOnePlayer(Long player_id);
 
 
-    public List<GameRating> selectRatingListFromOnePlayer(Integer player_id);
+    public List<GameRating> selectRatingListFromOnePlayer(Long player_id);
 
     //根据玩家id和游戏id搜索评分
-    public GameRating selectRatingByPlayerIdAndGameId(Integer player_id,Integer game_id);
+    public GameRating selectRatingByPlayerIdAndGameId(Long player_id,Integer game_id);
 
     public List<GameRating> selectRatingListByGameId(Integer game_id);
 
-    public Integer addPlayerGameRating(Integer game_id,Integer player_id,Integer rating,String comment);
+    public Integer addPlayerGameRating(Integer game_id,Long player_id,Integer rating,String comment);
 
     public HashMap<Integer,Integer> getGameRatingGrad(Integer game_id);
 
+    //搜索玩家评分为4或5分的游戏id和新的赋分
+    //5 2
+    //4 1
+    //3 0
+    //2 -1
+    //1 -2
+    public List<HashMap<String,Integer>> getNewPointAndGame(Long player_id);
 
 }

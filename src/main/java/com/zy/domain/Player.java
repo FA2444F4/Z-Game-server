@@ -10,7 +10,7 @@ public class Player {
      * 1封禁
      *
      */
-    private Integer id;
+    private Long id;
     private Integer status;
     private Double deposit;
     private String nick_name;
@@ -18,4 +18,27 @@ public class Player {
     private String name;
     private Integer sex;
     private String phone;
+
+    public Player(Long id, Integer status, Double deposit, String nick_name, String name, Integer sex, String phone) {
+        this.id = id;
+        this.status = status;
+        this.deposit = deposit;
+        this.nick_name = nick_name;
+        this.name = name;
+        this.sex = sex;
+        this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "id=" + id +
+                ", status=" + status +
+                ", deposit=" + deposit +
+                ", nick_name='" + nick_name + '\'' +
+                ", name='" + name + '\'' +
+                ", sex=" + sex +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

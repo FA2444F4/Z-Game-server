@@ -33,8 +33,8 @@ public class LoginController {
             session.setAttribute("currentUser", user);
 
             //model.addAttribute("currentUser",user);
-            /*Param param = new Param();
-            param.setUser(user);*/
+            Param param = new Param();
+            param.setUser(user);
             return new Result(Code.OK, user, null);
         } else {
             //告诉前端失败了
@@ -59,7 +59,7 @@ public class LoginController {
         //添加用户和玩家
         userService.addUserAndPlayer(user, player);
         //找到user的id并加在user中
-        Integer id = userService.selectUserIdByUsername(user.getUsername());
+        Long id = userService.selectUserIdByUsername(user.getUsername());
         user.setId(id);
         //添加session
         session.setAttribute("currentUser", user);
@@ -87,7 +87,7 @@ public class LoginController {
         //添加用户和开发商
         userService.addUserAndDeveloper(user, developer);
         //找到user的id并加在user中
-        Integer id = userService.selectUserIdByUsername(user.getUsername());
+        Long id = userService.selectUserIdByUsername(user.getUsername());
         user.setId(id);
         //添加session
         session.setAttribute("currentUser", user);

@@ -27,7 +27,7 @@ public class EssayServiceImpl implements EssayService {
     private EssayDao essayDao;
 
     @Override
-    public Integer addEssay(Integer user_type, Integer publisher_id, String essay_name, String essay_comment) {
+    public Integer addEssay(Integer user_type, Long publisher_id, String essay_name, String essay_comment) {
 
         //获取publisher_name
         String publisher_name;
@@ -66,7 +66,7 @@ public class EssayServiceImpl implements EssayService {
     }
 
     @Override
-    public ArrayList<HashMap<String, Object>> loadMyEssayList(Integer user_id, Integer user_type) {
+    public ArrayList<HashMap<String, Object>> loadMyEssayList(Long user_id, Integer user_type) {
         ArrayList<HashMap<String, Object>> essayList = new ArrayList<HashMap<String, Object>>();
         //获取含该用户的essay
         List<Essay> essays = essayDao.selectEssayByPublisherId(user_id);
@@ -230,7 +230,7 @@ public class EssayServiceImpl implements EssayService {
     }
 
     @Override
-    public Integer addMessage(Integer user_type,Integer messenger_id, Integer essay_id, String message) {
+    public Integer addMessage(Integer user_type,Long messenger_id, Integer essay_id, String message) {
         Long create_time=DataUtil.timestamp();
         String messenger_name;
         if (user_type == 0) {

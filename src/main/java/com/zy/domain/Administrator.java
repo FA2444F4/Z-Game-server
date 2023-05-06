@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Administrator {
-    private Integer id;
+    private Long id;
     private String nick_name;
 }

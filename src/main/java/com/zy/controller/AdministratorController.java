@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 @RequestMapping("/administrator")
@@ -34,14 +35,14 @@ public class AdministratorController {
          *
          * 准备管理员home需要的数据
          */
-        Integer id=user.getId();
+        Long id=user.getId();
         Param param = administratorService.getAdministratorInfo(id);
         return new Result(Code.OK,param,"管理员["+administrator.getNick_name()+"],您好!");
     }
 
     @GetMapping("/checkDuplicateUsername/{username}")
     public Result checkDuplicateUsername(@PathVariable String username){
-        Integer id = userService.selectUserIdByUsername(username);
+        Long id = userService.selectUserIdByUsername(username);
         return new Result(Code.OK,id,null);
 
     }

@@ -56,4 +56,6 @@ public interface TagService {
     public List<String> selectTagNameByGameId(Integer id);
 
     public Integer deleteTagByGameId(Integer id);
+
+    public List<Integer> selectTagIdListFromGame(Integer game_id);
 }

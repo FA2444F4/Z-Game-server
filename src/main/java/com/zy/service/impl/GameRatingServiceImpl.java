@@ -33,12 +33,12 @@ public class GameRatingServiceImpl implements GameRatingService {
     }
 
     @Override
-    public Boolean ifPlayerRatingNumberEnough(Integer player_id) {
+    public Boolean ifPlayerRatingNumberEnough(Long player_id) {
         return gameRatingDao.selectRatingCountFromOnePlayer(player_id) >= 5;
     }
 
     @Override
-    public void createOrUpdatePlayerRating(ArrayList<Map<String, Integer>> ratingList, Integer player_id) {
+    public void createOrUpdatePlayerRating(ArrayList<Map<String, Integer>> ratingList, Long player_id) {
         for (Map<String, Integer> element : ratingList) {
             Integer game_id = element.get("id");
             Integer rating = element.get("rating");
@@ -55,7 +55,7 @@ public class GameRatingServiceImpl implements GameRatingService {
     }
 
     @Override
-    public ArrayList<Map<String, Integer>> getGameIdAndRatingFromOnePlayer(Integer player_id) {
+    public ArrayList<Map<String, Integer>> getGameIdAndRatingFromOnePlayer(Long player_id) {
         //初始化该用户的map<int 游戏id,int 评分>
         ArrayList<Map<String, Integer>> currentPlayerRatingMapList = new ArrayList<Map<String, Integer>>();
         List<Integer> gameIdList = gameDao.selectGameIdList();
@@ -69,28 +69,25 @@ public class GameRatingServiceImpl implements GameRatingService {
         List<Map<String, Integer>> gameIdRatingList = gameRatingDao.getGameIdAndRatingFromOnePlayer(player_id);
         for (Map<String, Integer> tempMap : gameIdRatingList) {
             Integer rating = tempMap.get("rating");
-            if (rating != -1 && rating != 0) {//有必要计入数据
+            if (rating>=1&&rating<=5) {//有必要计入数据
                 Integer gameId = tempMap.get("game_id");
                 for (Map<String, Integer> element : currentPlayerRatingMapList) {
-                    if (element.get("game_id") == gameId) {
+                    if (element.get("game_id").equals(gameId) ) {
                         element.put("rating",rating);
                     }
                 }
             }
         }
-
-
-
         return currentPlayerRatingMapList;
     }
 
     @Override
-    public List<GameRating> selectRatingListFromOnePlayer(Integer player_id) {
+    public List<GameRating> selectRatingListFromOnePlayer(Long player_id) {
         return gameRatingDao.selectRatingListFromOnePlayer(player_id);
     }
 
     @Override
-    public GameRating selectRatingByPlayerIdAndGameId(Integer player_id, Integer game_id) {
+    public GameRating selectRatingByPlayerIdAndGameId(Long player_id, Integer game_id) {
         return gameRatingDao.selectRatingByPlayerIdAndGameId(player_id,game_id);
     }
 
@@ -100,7 +97,7 @@ public class GameRatingServiceImpl implements GameRatingService {
     }
 
     @Override
-    public Integer addPlayerGameRating(Integer game_id, Integer player_id, Integer rating, String comment) {
+    public Integer addPlayerGameRating(Integer game_id, Long player_id, Integer rating, String comment) {
         Long create_time=DataUtil.timestamp();
         Integer is_exist=1;
         return gameRatingDao.insertRating(game_id,player_id,rating,comment,create_time,is_exist);
@@ -114,5 +111,21 @@ public class GameRatingServiceImpl implements GameRatingService {
         }
 
         return resMap;
+    }
+
+    @Override
+    public List<HashMap<String, Integer>> getNewPointAndGame(Long player_id) {
+        List<HashMap<String, Integer>> res = new ArrayList<HashMap<String, Integer>>();
+        List<GameRating> gameRatings = gameRatingDao.selectRatingListFromOnePlayer(player_id);
+        for (GameRating item : gameRatings) {
+            Integer rating=item.getRating();
+            if (rating>=1){//如果评分过
+                HashMap<String, Integer> map = new HashMap<>();
+                map.put("game_id",item.getGame_id());
+                map.put("rating",rating);
+                res.add(map);
+            }
+        }
+        return res;
     }
 }

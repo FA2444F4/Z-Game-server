@@ -6,13 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public interface UserWalletService {
-    public UserWallet getUserWallet(Integer user_id);
+    public UserWallet getUserWallet(Long user_id);
 
-    public void initUserWallet(Integer user_id);
+    public void initUserWallet(Long user_id);
 
     //扣钱
-    public void subBalance(Integer user_id, Double x);
+    public void subBalance(Long user_id, Double x);
 
     //加钱
-    public void addBalance(Integer user_id,Double x );
+    public void addBalance(Long user_id,Double x );
 }

@@ -17,15 +17,7 @@ public class EssayController {
     @Autowired
     private EssayService essayService;
 
-    /*@GetMapping("/{id}")
-    public Result getById(@PathVariable Integer id) {
-        System.out.println("id="+id);
-        Book book = bookService.getById(id);
-        Integer code = book != null ? Code.GET_OK : Code.GET_ERR;
-        String msg = book != null ? "" : "数据查询失败,请重试!";
 
-        return new Result(code, book, msg);
-    }*/
 
     @GetMapping("/loadEssayList")
     public Result loadEssayList() {
@@ -62,7 +54,7 @@ public class EssayController {
     public Result addEssay(HttpSession session, @RequestBody Essay essay) {
         //根据session判断是否是管理员
         User user = (User) session.getAttribute("currentUser");
-        Integer publisher_id = user.getId();
+        Long publisher_id = user.getId();
         Integer user_type = user.getType();
         essayService.addEssay(user_type, publisher_id, essay.getEssay_name(), essay.getEssay_comment());
         return new Result(Code.OK, null, null);
@@ -92,7 +84,7 @@ public class EssayController {
     @PostMapping("addMessage/{essay_id}/{inputMessage}")
     public Result addMessage(@PathVariable Integer essay_id,@PathVariable String inputMessage,HttpSession session){
         User user = (User) session.getAttribute("currentUser");
-        Integer messenger_id=user.getId();
+        Long messenger_id=user.getId();
         Integer user_type=user.getType();
 
 

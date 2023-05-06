@@ -10,10 +10,10 @@ import java.util.List;
 @Transactional
 public interface EssayService {
     Integer addEssay(
-            Integer user_type, Integer publisher_id, String essay_name, String essay_comment);
+            Integer user_type, Long publisher_id, String essay_name, String essay_comment);
 
     ArrayList<HashMap<String,Object>> loadEssayList();
-    ArrayList<HashMap<String,Object>> loadMyEssayList(Integer user_id,Integer user_type);
+    ArrayList<HashMap<String,Object>> loadMyEssayList(Long user_id,Integer user_type);
     ArrayList<HashMap<String,Object>> loadEssayListTakeNew();
     ArrayList<HashMap<String,Object>> loadEssayListTakeOld();
     ArrayList<HashMap<String,Object>> loadEssayListTakeLikes();
@@ -25,5 +25,5 @@ public interface EssayService {
 
     Integer addLikes(Integer essay_id);
 
-    Integer addMessage(Integer user_type, Integer messenger_id,Integer essay_id,String message);
+    Integer addMessage(Integer user_type, Long messenger_id,Integer essay_id,String message);
 }

@@ -45,5 +45,5 @@ public interface UserService {
      * @param username
      * @return
      */
-    public Integer selectUserIdByUsername(String username);
+    public Long selectUserIdByUsername(String username);
 }

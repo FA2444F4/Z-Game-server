@@ -16,7 +16,7 @@ public interface PlayerService {
      * @param id
      * @return
      */
-    public Player getPlayerById(Integer id);
+    public Player getPlayerById(Long id);
 
     /**
      * 修改玩家的player和user
@@ -31,13 +31,13 @@ public interface PlayerService {
      * @param id
      * @return
      */
-    public Param getPlayerInfo(Integer id);
+    public Param getPlayerInfo(Long id);
 
-    public List<Integer> selectPlayerIdList();
+    public List<Long> selectPlayerIdList();
 
-    public Map<String, Object> selectPlayerGameByOne(Integer player_id, Integer game_id);
+    public Map<String, Object> selectPlayerGameByOne(Long player_id, Integer game_id);
 
     //看玩家是否买了这个游戏,看玩家是否评分
-    public Map<String,Integer> buyAndRatingButtonInfo(Integer player_id, Integer game_id);
+    public Map<String,Integer> buyAndRatingButtonInfo(Long player_id, Integer game_id);
 
 }

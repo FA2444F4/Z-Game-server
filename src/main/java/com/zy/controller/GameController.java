@@ -49,7 +49,7 @@ public class GameController {
         //找到user
         User user = (User) session.getAttribute("currentUser");
         //开发商id
-        Integer developer_id = user.getId();
+        Long developer_id = user.getId();
         Game game = JsonXMLUtils.map2obj((Map<String, Object>) map.get("game"), Game.class);
         List<Integer> selectTag = (List<Integer>) map.get("selectTag");
         game.setDeveloper_id(developer_id);
@@ -66,7 +66,7 @@ public class GameController {
     public Result getGameListByDeveloperId(HttpSession session) {
         //获取管理员
         User user = (User) session.getAttribute("currentUser");
-        Integer developer_id = user.getId();
+        Long developer_id = user.getId();
         //获取指定开发商的所有游戏
         List<Game> gameList = gameService.getGameListByDeveloperId(developer_id);
         return new Result(Code.OK, gameList, null);
@@ -80,7 +80,7 @@ public class GameController {
 
         //获取User
         User user = (User) session.getAttribute("currentUser");
-        Integer developer_id = user.getId();
+        Long developer_id = user.getId();
         //获取指定开发商的所有游戏
         List<Game> gameList = gameService.getGameListByDeveloperId(developer_id);
         return new Result(Code.OK, gameList, null);
@@ -130,7 +130,7 @@ public class GameController {
 
         User user = (User) session.getAttribute("currentUser");
         //开发商id
-        Integer id = user.getId();
+        Long id = user.getId();
         ArrayList<HashMap<String, Object>> gameList = gameService.getPlayerGameList(id);
         return new Result(Code.OK, gameList, null);
 
@@ -206,6 +206,5 @@ public class GameController {
         return new Result(Code.OK, gameList, null);
 
     }
-
 
 }

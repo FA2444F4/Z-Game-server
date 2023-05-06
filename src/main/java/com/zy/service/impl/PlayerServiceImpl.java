@@ -32,7 +32,7 @@ public class PlayerServiceImpl implements PlayerService {
     private GameRatingDao gameRatingDao;
 
     @Override
-    public Player getPlayerById(Integer id) {
+    public Player getPlayerById(Long id) {
         return playerDao.getPlayerById(id);
     }
 
@@ -45,7 +45,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Param getPlayerInfo(Integer id) {
+    public Param getPlayerInfo(Long id) {
         User user = userDao.getUserById(id);
         Player player = playerDao.getPlayerById(id);
         Param param = new Param();
@@ -56,17 +56,17 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<Integer> selectPlayerIdList() {
+    public List<Long> selectPlayerIdList() {
         return playerDao.selectPlayerIdList();
     }
 
     @Override
-    public Map<String, Object> selectPlayerGameByOne(Integer player_id, Integer game_id) {
+    public Map<String, Object> selectPlayerGameByOne(Long player_id, Integer game_id) {
         return playerGameDao.selectPlayerGameByOne(player_id,game_id);
     }
 
     @Override
-    public Map<String, Integer> buyAndRatingButtonInfo(Integer player_id, Integer game_id) {
+    public Map<String, Integer> buyAndRatingButtonInfo(Long player_id, Integer game_id) {
         Integer isRating =gameRatingDao.selectIsRating(player_id,game_id);
         Integer isBuy=playerGameDao.selectGameIsBuy(player_id,game_id);
         ///

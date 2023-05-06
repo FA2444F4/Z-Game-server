@@ -30,14 +30,14 @@ public class DeveloperController {
         //是开发商
         //找到开发商
         Developer developer = developerService.getDeveloperById(user.getId());
-        Integer id=user.getId();
+        Long id=user.getId();
         Param param = developerService.getDeveloperInfo(id);
         return new Result(Code.OK,param,"开发商["+developer.getName()+"],您好!");
     }
 
     @GetMapping("/checkDuplicateUsername/{username}")
     public Result checkDuplicateUsername(@PathVariable String username){
-        Integer id = userService.selectUserIdByUsername(username);
+        Long id = userService.selectUserIdByUsername(username);
         return new Result(Code.OK,id,null);
 
     }
@@ -57,7 +57,7 @@ public class DeveloperController {
     @GetMapping("/getDeveloperWallet")
     public Result getDeveloperWallet(HttpSession session){
         User user = (User) session.getAttribute("currentUser");
-        Integer user_id=user.getId();
+        Long user_id=user.getId();
         UserWallet userWallet=userWalletService.getUserWallet(user_id);
         return new Result(Code.OK,userWallet,null);
     }
@@ -65,7 +65,7 @@ public class DeveloperController {
     @PutMapping("/subBalance/{x}")
     public Result addBalance(@PathVariable Double x,HttpSession session){
         User user = (User) session.getAttribute("currentUser");
-        Integer user_id=user.getId();
+       Long user_id=user.getId();
         userWalletService.subBalance(user_id,x);
         return new Result(Code.OK,null,null);
     }

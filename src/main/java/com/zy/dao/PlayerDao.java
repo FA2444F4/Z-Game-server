@@ -13,16 +13,21 @@ public interface PlayerDao {
     public Integer addPlayer(Player player);
 
     @Select("SELECT * FROM player WHERE id=#{id}")
-    public Player getPlayerById(Integer id);
+    public Player getPlayerById(Long id);
 
     @Update("update player set nick_name=#{nick_name},name=#{name},sex=#{sex},phone=#{phone} where id=#{id}")
     public Integer updatePlayerInfo(Player player);
 
     //获取游戏的所有id号
     @Select("select id from player")
-    public List<Integer> selectPlayerIdList();
+    public List<Long> selectPlayerIdList();
 
     @Delete("delete from player where id=#{user_id}")
-    public Integer deleteAccount(Integer user_id);
+    public Integer deleteAccount(Long user_id);
 
+    @Insert("INSERT INTO player(id, status, deposit, nick_name, name, sex, phone) VALUES(#{id}, #{status}, #{deposit}, #{nick_name}, #{name}, #{sex}, #{phone})")
+    void insertPlayer(Player player);
+
+    @Delete("delete from player")
+    public Integer deleteAll();
 }

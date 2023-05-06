@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Developer {
-    private Integer id;
+    private Long id;
     private String name;
     private Double deposit;
     private String phone;

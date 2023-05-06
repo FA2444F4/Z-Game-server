@@ -24,7 +24,7 @@ public interface GameService {
      * @param id
      * @return
      */
-    public List<Game> getGameListByDeveloperId(Integer id);
+    public List<Game> getGameListByDeveloperId(Long id);
 
     /**
      * 根据游戏id搜索游戏
@@ -41,7 +41,7 @@ public interface GameService {
      *  其他待定
      */
     public ArrayList<HashMap<String,Object>> selectAllGame();
-    public ArrayList<HashMap<String,Object>> getPlayerGameList(Integer player_id);
+    public ArrayList<HashMap<String,Object>> getPlayerGameList(Long player_id);
 
     //根据用户输入词模糊查询游戏
     public ArrayList<HashMap<String,Object>> selectGameByInput(String input);
@@ -60,4 +60,6 @@ public interface GameService {
     public ArrayList<HashMap<String,Object>> getRecommendGameListByGameIdList(List<Integer> gameCountList);
 
     public String getGameName(Integer id);
+
+    public List<Integer> getTagSimilarity(List<Integer> currentTagIdList,List<Integer> ultraGamdIdList,Integer tagSlotNum);
 }

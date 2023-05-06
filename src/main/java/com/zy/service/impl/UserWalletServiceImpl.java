@@ -12,12 +12,12 @@ public class UserWalletServiceImpl implements UserWalletService {
     @Autowired
     private UserWalletDao userWalletDao;
 
-    public UserWallet getUserWallet(Integer user_id){
+    public UserWallet getUserWallet(Long user_id){
         return userWalletDao.getUserWallet(user_id);
     }
 
     @Override
-    public void initUserWallet(Integer user_id) {
+    public void initUserWallet(Long user_id) {
         Double balance=0.0;
         Long create_time= DataUtil.timestamp();
         Long update_time= create_time;
@@ -27,12 +27,12 @@ public class UserWalletServiceImpl implements UserWalletService {
     }
 
     @Override
-    public void subBalance(Integer user_id, Double x) {
+    public void subBalance(Long user_id, Double x) {
         userWalletDao.subBalance(user_id,x);
     }
 
     @Override
-    public void addBalance(Integer user_id, Double x) {
+    public void addBalance(Long user_id, Double x) {
         userWalletDao.addBalance(user_id,x);
 
     }

@@ -31,4 +31,20 @@ public interface TagDao {
 
     @Delete("delete from tag where game_id=#{id}")
     public Integer deleteTagByGameId(Integer id);
+
+    //标签是否存在
+    @Select("select count(*) from tag where id=#{id}")
+    public Integer ifTagExist(Integer id);
+    //插入带id的标签
+    @Insert("insert into tag values(#{id},#{name},#{description})")
+    public Integer addTagWhichHaveId(Tag tag);
+
+    @Select("select tag_id from game_tag where game_id=#{game_id}")
+    public List<Integer> selectTagIdListFromGame(Integer game_id);
+
+    @Select("select id from tag")
+    public List<Integer> selectTagIdList();
+
+
+
 }

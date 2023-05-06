@@ -18,12 +18,12 @@ public class AdministratorServiceImpl implements AdministratorService {
     private UserDao userDao;
 
     @Override
-    public Administrator getAdministratorById(Integer id) {
+    public Administrator getAdministratorById(Long id) {
         return administratorDao.getAdministratorById(id);
     }
 
     @Override
-    public Param getAdministratorInfo(Integer id) {
+    public Param getAdministratorInfo(Long id) {
         User user = userDao.getUserById(id);
         Administrator administrator = administratorDao.getAdministratorById(id);
         Param param = new Param();

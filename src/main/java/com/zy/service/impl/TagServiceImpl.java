@@ -58,5 +58,10 @@ public class TagServiceImpl implements TagService {
         return tagDao.deleteTagByGameId(id);
     }
 
+    @Override
+    public List<Integer> selectTagIdListFromGame(Integer game_id) {
+        return tagDao.selectTagIdListFromGame(game_id);
+    }
+
 
 }
