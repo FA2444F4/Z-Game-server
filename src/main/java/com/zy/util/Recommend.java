@@ -6,10 +6,6 @@ import java.util.Map;
 public class Recommend {
 
     public static double getPearsonCorrelationFromArrayList(ArrayList<Map<String,Integer>> arr1,ArrayList<Map<String,Integer>> arr2){
-        /*System.out.println("arr1");
-        System.out.println(arr1);
-        System.out.println("arr2");
-        System.out.println(arr2);*/
         //arr1是用户,arr2是其他用户
         int n = arr1.size();
         if (n != arr2.size() || n == 0) {

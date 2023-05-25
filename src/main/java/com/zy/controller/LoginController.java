@@ -31,8 +31,6 @@ public class LoginController {
         if (user != null) {//登录成功
             //添加session
             session.setAttribute("currentUser", user);
-
-            //model.addAttribute("currentUser",user);
             Param param = new Param();
             param.setUser(user);
             return new Result(Code.OK, user, null);

@@ -194,9 +194,7 @@ public class PlayerController {
      
     @GetMapping("/getRecommendGameListPlus")
     public Result getRecommendGameListPlus(HttpSession session) {
-        ////////////////////////////////////////////////////////////////
-        ////                         计算用户相关度               ////////////
-        ////////////////////////////////////////////////////////////////
+        ////计算用户相关度
         //获取当前玩家评分数组
         User user = (User) session.getAttribute("currentUser");
         Long mine_id = user.getId();
@@ -206,7 +204,7 @@ public class PlayerController {
         //初始化相关度表
         ArrayList<Map<String, Object>> correlation_list = new ArrayList<>();
         for (Long one_player_id : all_player_id_list) {
-            if (!one_player_id.equals(mine_id)) {//别和自己算相似度
+            if (!one_player_id.equals(mine_id)) {//计算过程略过自己
                 ArrayList<Map<String, Integer>> other_rating_list = gameRatingService.getGameIdAndRatingFromOnePlayer(one_player_id);
                 Double pearsonCorrelation = Recommend.getPearsonCorrelationFromArrayList(self_rating_list, other_rating_list);
                 HashMap<String, Object> map = new HashMap<>();
@@ -222,7 +220,6 @@ public class PlayerController {
 
                 Double correlation1 = ((Double) o1.get("pearsonCorrelation"));
                 Double correlation2 = ((Double) o2.get("pearsonCorrelation"));
-//                return DataUtil.makeNumberToInteger(correlation1)-DataUtil.makeNumberToInteger(correlation2);
                 if (correlation1 > correlation2) {
                     return -1;
                 } else {
@@ -265,6 +262,7 @@ public class PlayerController {
         }
         //添加评分到sum
         //找出高相关度玩家
+        //计算游戏得分表
         for (Map<String, Object> map : correlation_list) {
             Long player_id=(long)map.get("player_id");
             Double correlation=(double)map.get("pearsonCorrelation");
@@ -347,21 +345,14 @@ public class PlayerController {
                 }
             }
         }
-        /*System.out.println("tagIdList");
-        System.out.println(tagIdList);*/
 
-
-        //tagIdList [23, 28, 1, 25, 2, 3]
         //找tag相似度高的游戏
-        //输入当前tagIdList [23, 28, 1, 25, 2, 3]
         //返回相似度列表
         List<Integer> tagSimilarityIdList = gameService.getTagSimilarity(tagIdList, ultraGamdIdList, tagSlotNum);
         for (Integer game_id : tagSimilarityIdList) {
             ultraGamdIdList.add(game_id);
         }
 
-        /*System.out.println("ultraGamdIdList");
-        System.out.println(ultraGamdIdList);*/
 
 
         ArrayList<HashMap<String, Object>> gameList = gameService.getRecommendGameListByGameIdList(ultraGamdIdList);
